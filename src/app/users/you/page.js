@@ -47,7 +47,7 @@ export default async function UserPage() {
   // Fetch posts
   const posts = (
     await db.query(
-      `SELECT * FROM posts WHERE user_id = $1 ORDER BY created_at DESC`,
+      `SELECT * FROM postss WHERE user_id = $1 ORDER BY created_at DESC`,
       [user[0].id],
     )
   ).rows;

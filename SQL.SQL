@@ -4,12 +4,14 @@
 
 CREATE TABLE books (
     id SERIAL PRIMARY KEY,
+    user_id INT,
     title VARCHAR(255),
     author VARCHAR(255),
     description TEXT,
     quote VARCHAR(255),
     released DATE,
-    img_url TEXT
+    img_url TEXT,
+    FOREIGN KEY (user_id) REFERENCES user_account(id)
 );
 
 CREATE TABLE genres (

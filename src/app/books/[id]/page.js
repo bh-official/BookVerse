@@ -67,12 +67,14 @@ export default async function SingleBookPage({ params }) {
                 </p>
               )}
             </div>
-            <Link
-              href={`/books/${id}/edit`}
-              className="px-3 py-1 text-sm border rounded hover:bg-gray-50 transition-colors"
-            >
-              Edit
-            </Link>
+            {book.user_id === user[0].id && (
+              <Link
+                href={`/books/${id}/edit`}
+                className="px-3 py-1 text-sm border rounded hover:bg-gray-50 transition-colors"
+              >
+                Edit
+              </Link>
+            )}
           </div>
           {book.description && <p className="mt-4">{book.description}</p>}
           {book.quote && (

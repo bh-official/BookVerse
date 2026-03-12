@@ -12,10 +12,13 @@ export default async function NewBookPage() {
     const { title, author, description, quote, released, img_url } =
       Object.fromEntries(formData);
 
+    // get the currently logged in user details
+    const user = await getUser();
+
     // inset the new book into the database
     const result = await db.query(
-      `INSERT INTO books (title, author, description, quote, released, img_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
-      [title, author, description, quote, released, img_url],
+      `INSERT INTO books (user_id, title, author, description, quote, released, img_url) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
+      [user[0].id, title, author, description, quote, released, img_url],
     );
 
     // redirect to the new books page

@@ -26,6 +26,18 @@ export default async function EditBookPage({ params }) {
     );
   }
 
+  // check if the current user owns this book
+  if (book.user_id !== user[0].id) {
+    return (
+      <div className="p-6">
+        <p>You are not authorized to edit this book.</p>
+        <Link href={`/books/${id}`} className="text-blue-500 hover:underline">
+          Back to book
+        </Link>
+      </div>
+    );
+  }
+
   async function handleUpdateBook(formData) {
     "use server";
     // pull the fields from the form data
