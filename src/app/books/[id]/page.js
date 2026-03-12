@@ -1,6 +1,7 @@
 import { db } from "@/utils/db";
 import { getUser } from "@/utils/getUser";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default async function SingleBookPage({ params }) {
   // make sure user is loggged in
@@ -55,14 +56,24 @@ export default async function SingleBookPage({ params }) {
             className="w-48 aspect-[2/3] object-cover rounded shrink-0"
           />
         )}
-        <div>
-          <h1 className="text-3xl">{book.title}</h1>
-          <p className="opacity-60 mt-1">by {book.author}</p>
-          {book.released && (
-            <p className="text-sm opacity-40 mt-1">
-              {new Date(book.released).toLocaleDateString()}
-            </p>
-          )}
+        <div className="flex-1">
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-3xl">{book.title}</h1>
+              <p className="opacity-60 mt-1">by {book.author}</p>
+              {book.released && (
+                <p className="text-sm opacity-40 mt-1">
+                  {new Date(book.released).toLocaleDateString()}
+                </p>
+              )}
+            </div>
+            <Link
+              href={`/books/${id}/edit`}
+              className="px-3 py-1 text-sm border rounded hover:bg-gray-50 transition-colors"
+            >
+              Edit
+            </Link>
+          </div>
           {book.description && <p className="mt-4">{book.description}</p>}
           {book.quote && (
             <p className="mt-4 italic opacity-70">"{book.quote}"</p>
