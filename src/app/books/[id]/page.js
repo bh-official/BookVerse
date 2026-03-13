@@ -82,7 +82,6 @@ export default async function SingleBookPage({ params }) {
                     await db.query(`DELETE FROM books WHERE id = $1`, [id]);
                     redirect(`/books`);
                   }}
-                  label="Delete"
                 />
               </div>
             )}
