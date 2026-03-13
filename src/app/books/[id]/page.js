@@ -2,6 +2,7 @@ import { db } from "@/utils/db";
 import { getUser } from "@/utils/getUser";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import DeleteButton from "@/components/DeleteButton";
 
 export default async function SingleBookPage({ params }) {
   // make sure user is loggged in
@@ -75,20 +76,14 @@ export default async function SingleBookPage({ params }) {
                 >
                   Edit
                 </Link>
-                <form
+                <DeleteButton
                   action={async () => {
                     "use server";
                     await db.query(`DELETE FROM books WHERE id = $1`, [id]);
                     redirect(`/books`);
                   }}
-                >
-                  <button
-                    type="submit"
-                    className="px-3 py-1 text-sm border border-red-300 text-red-600 rounded hover:bg-red-50 transition-colors cursor-pointer"
-                  >
-                    Delete
-                  </button>
-                </form>
+                  label="Delete"
+                />
               </div>
             )}
           </div>
@@ -132,7 +127,7 @@ export default async function SingleBookPage({ params }) {
                     >
                       Edit
                     </Link>
-                    <form
+                    <DeleteButton
                       action={async () => {
                         "use server";
                         await db.query(`DELETE FROM review WHERE id = $1`, [
@@ -140,14 +135,8 @@ export default async function SingleBookPage({ params }) {
                         ]);
                         redirect(`/books/${id}`);
                       }}
-                    >
-                      <button
-                        type="submit"
-                        className="text-sm text-red-500 hover:underline cursor-pointer"
-                      >
-                        Delete
-                      </button>
-                    </form>
+                      label="Delete"
+                    />
                   </div>
                 )}
               </div>

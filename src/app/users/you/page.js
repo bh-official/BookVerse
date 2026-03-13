@@ -4,6 +4,7 @@ import Link from "next/link";
 import { revalidatePath } from "next/cache";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import DeleteButton from "@/components/DeleteButton";
 
 async function createPost(formData) {
   "use server";
@@ -100,7 +101,7 @@ export default async function UserPage() {
                     >
                       Edit
                     </Link>
-                    <form
+                    <DeleteButton
                       action={async () => {
                         "use server";
                         await db.query(`DELETE FROM postss WHERE id = $1`, [
@@ -108,14 +109,8 @@ export default async function UserPage() {
                         ]);
                         redirect("/users/you");
                       }}
-                    >
-                      <button
-                        type="submit"
-                        className="text-sm text-red-500 hover:underline cursor-pointer"
-                      >
-                        Delete
-                      </button>
-                    </form>
+                      label="Delete"
+                    />
                   </div>
                 </div>
                 <p className="text-sm text-gray-400 mt-2">
