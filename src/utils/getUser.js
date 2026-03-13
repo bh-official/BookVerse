@@ -5,8 +5,10 @@ import { redirect } from "next/navigation";
 export async function getUser() {
   const { userId } = await auth();
 
-  // if there is no userId, we'll the ask the user to sign in (as they're not logged in via clerk)
-  if (!userId) redirect("/sign-in");
+  // if there is no userId, return null (user not logged in)
+  if (!userId) {
+    return null;
+  }
 
   // check database to see if it has that user in it
   const userDetails = (
@@ -14,7 +16,9 @@ export async function getUser() {
   ).rows;
 
   // if nothing came back for that user
-  if (userDetails.length === 0) redirect("/users/onboarding");
+  if (userDetails.length === 0) {
+    redirect("/users/onboarding");
+  }
 
   return userDetails;
 }

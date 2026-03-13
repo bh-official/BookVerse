@@ -5,7 +5,7 @@ import Link from "next/link";
 import DeleteButton from "@/components/DeleteButton";
 
 export default async function SingleBookPage({ params }) {
-  // make sure user is loggged in
+  // get user (can be null if not logged in)
   const user = await getUser();
 
   // get the book id form the URL params
@@ -68,7 +68,7 @@ export default async function SingleBookPage({ params }) {
                 </p>
               )}
             </div>
-            {book.user_id === user[0].id && (
+            {book.user_id && user && book.user_id === user[0].id && (
               <div className="flex gap-2">
                 <Link
                   href={`/books/${id}/edit`}
@@ -94,20 +94,29 @@ export default async function SingleBookPage({ params }) {
       </div>
 
       <h2 className="text-xl mb-3">Leave a Review</h2>
-      <form className="mb-10" action={handleSubmitReview}>
-        <textarea
-          name="content"
-          placeholder="Write your review..."
-          required
-          className="w-full border rounded p-3 resize-none h-24"
-        />
-        <button
-          type="submit"
-          className="mt-2 px-4 py-2 bg-black text-white rounded hover:opacity-80 transition-opacity cursor-pointer"
-        >
-          Submit Review
-        </button>
-      </form>
+      {user ? (
+        <form className="mb-10" action={handleSubmitReview}>
+          <textarea
+            name="content"
+            placeholder="Write your review..."
+            required
+            className="w-full border rounded p-3 resize-none h-24"
+          />
+          <button
+            type="submit"
+            className="mt-2 px-4 py-2 bg-black text-white rounded hover:opacity-80 transition-opacity cursor-pointer"
+          >
+            Submit Review
+          </button>
+        </form>
+      ) : (
+        <p className="mb-10 text-gray-500">
+          <Link href="/sign-in" className="text-blue-500 hover:underline">
+            Sign in
+          </Link>{" "}
+          to leave a review
+        </p>
+      )}
 
       <h2 className="text-xl mb-3">Reviews</h2>
       {reviews.length === 0 ? (
@@ -118,7 +127,7 @@ export default async function SingleBookPage({ params }) {
             <li key={review.id} className="border-b pb-4">
               <div className="flex justify-between items-start">
                 <p className="font-medium">{review.username}</p>
-                {review.user_id === user[0].id && (
+                {review.user_id && user && review.user_id === user[0].id && (
                   <div className="flex gap-2">
                     <Link
                       href={`/books/${id}/review/${review.id}/edit`}
