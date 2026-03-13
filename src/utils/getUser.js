@@ -15,7 +15,7 @@ export async function getUser() {
     await db.query(`select * from user_account where clerk_id = $1`, [userId])
   ).rows;
 
-  // if nothing came back for that user
+  // if nothing came back for that user, redirect to onboarding
   if (userDetails.length === 0) {
     redirect("/users/onboarding");
   }
