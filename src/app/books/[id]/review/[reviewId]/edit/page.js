@@ -114,11 +114,6 @@ export default async function EditReviewPage({ params }) {
           <button
             type="submit"
             className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors cursor-pointer"
-            onClick={(e) => {
-              if (!confirm("Are you sure you want to delete this review?")) {
-                e.preventDefault();
-              }
-            }}
           >
             Delete Review
           </button>
