@@ -16,6 +16,11 @@ const unna = Unna({
 export const metadata = {
   title: "BookVerse",
   description: "A Full Stack Dynamic Book Review Application",
+  openGraph: {
+    title: "BookVerse",
+    description: "A Full Stack Dynamic Book Review Application",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }) {
