@@ -53,6 +53,15 @@ export default async function EditPostPage({ params }) {
     redirect("/users/you");
   }
 
+  async function handleDeletePost() {
+    "use server";
+    // delete the post from the database
+    await db.query(`DELETE FROM postss WHERE id = $1`, [postId]);
+
+    // redirect to the user's profile
+    redirect("/users/you");
+  }
+
   return (
     <div className="max-w-2xl mx-auto p-6">
       <div className="mb-6">
@@ -92,6 +101,22 @@ export default async function EditPostPage({ params }) {
           </Link>
         </div>
       </form>
+
+      <div className="mt-8 pt-4 border-t">
+        <form action={handleDeletePost}>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors cursor-pointer"
+            onClick={(e) => {
+              if (!confirm("Are you sure you want to delete this post?")) {
+                e.preventDefault();
+              }
+            }}
+          >
+            Delete Post
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

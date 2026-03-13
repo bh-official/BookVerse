@@ -54,6 +54,15 @@ export default async function EditBookPage({ params }) {
     redirect(`/books/${id}`);
   }
 
+  async function handleDeleteBook() {
+    "use server";
+    // delete the book from the database
+    await db.query(`DELETE FROM books WHERE id = $1`, [id]);
+
+    // redirect to books list
+    redirect(`/books`);
+  }
+
   return (
     <div className="max-w-2xl mx-auto p-6">
       <div className="mb-6">
@@ -146,6 +155,22 @@ export default async function EditBookPage({ params }) {
           >
             Cancel
           </Link>
+        </div>
+
+        <div className="mt-8 pt-4 border-t">
+          <form action={handleDeleteBook}>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors cursor-pointer"
+              onClick={(e) => {
+                if (!confirm("Are you sure you want to delete this book?")) {
+                  e.preventDefault();
+                }
+              }}
+            >
+              Delete Book
+            </button>
+          </form>
         </div>
       </form>
     </div>
