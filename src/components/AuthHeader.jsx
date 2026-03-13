@@ -2,9 +2,15 @@
 
 import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-export default function AuthHeader() {
+export default function AuthHeader({ hideBooks = false }) {
   const { isSignedIn } = useUser();
+  const pathname = usePathname();
+  const isLandingPage = pathname === "/";
+
+  // Auto-hide books on landing page unless explicitly shown
+  const shouldHideBooks = hideBooks || isLandingPage;
 
   return (
     <header className="flex justify-between items-center px-8 py-5 bg-gradient-to-r from-indigo-900 via-purple-800 to-indigo-900 shadow-lg">
@@ -20,12 +26,14 @@ export default function AuthHeader() {
       <div className="flex items-center gap-8">
         {!isSignedIn ? (
           <>
-            <Link
-              href="/books"
-              className="text-white hover:text-pink-300 transition-colors font-semibold"
-            >
-              Books
-            </Link>
+            {!shouldHideBooks && (
+              <Link
+                href="/books"
+                className="text-white hover:text-pink-300 transition-colors font-semibold"
+              >
+                Books
+              </Link>
+            )}
             <SignInButton mode="modal">
               <button className="text-white hover:text-pink-300 transition-colors font-semibold">
                 Sign In
@@ -39,12 +47,14 @@ export default function AuthHeader() {
           </>
         ) : (
           <div className="flex items-center gap-6">
-            <Link
-              href="/books"
-              className="text-white hover:text-pink-300 transition-colors font-semibold"
-            >
-              Books
-            </Link>
+            {!shouldHideBooks && (
+              <Link
+                href="/books"
+                className="text-white hover:text-pink-300 transition-colors font-semibold"
+              >
+                Books
+              </Link>
+            )}
             <Link
               href="/users/you"
               className="text-white hover:text-pink-300 transition-colors font-semibold"
