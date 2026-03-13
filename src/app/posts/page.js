@@ -33,28 +33,27 @@ export default async function PostsPage() {
                 key={post.id}
                 className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
-                    {post.username ? post.username[0].toUpperCase() : "?"}
+                <Link href={`/users/${post.user_id}`} className="block">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
+                      {post.username ? post.username[0].toUpperCase() : "?"}
+                    </div>
+                    <span className="text-white font-semibold hover:text-pink-300 transition-colors">
+                      {post.username || "Unknown User"}
+                    </span>
                   </div>
-                  <Link
-                    href={`/users/${post.user_id}`}
-                    className="text-white font-semibold hover:text-pink-300 transition-colors"
-                  >
-                    {post.username || "Unknown User"}
-                  </Link>
-                </div>
-                <p className="text-white text-lg mb-4">{post.content}</p>
-                <p className="text-sm text-gray-500">
-                  {new Date(post.created_at).toLocaleString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    timeZoneName: "short",
-                  })}
-                </p>
+                  <p className="text-white text-lg mb-4">{post.content}</p>
+                  <p className="text-sm text-gray-500">
+                    {new Date(post.created_at).toLocaleString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      timeZoneName: "short",
+                    })}
+                  </p>
+                </Link>
               </div>
             ))}
           </div>

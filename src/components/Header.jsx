@@ -8,9 +8,12 @@ export default function Header({ hideBooks = false }) {
   const { isSignedIn } = useUser();
   const pathname = usePathname();
 
-  // Hide Books on landing page and books pages
+  // Hide Books and Posts on landing page, books pages, and posts pages
+  // Show Posts on landing page only when signed in
   const isBooksPage = pathname === "/books" || pathname.startsWith("/books/");
+  const isPostsPage = pathname === "/posts" || pathname.startsWith("/posts/");
   const shouldHideBooks = hideBooks || isBooksPage || pathname === "/";
+  const shouldHidePosts = isPostsPage || (pathname === "/" && !isSignedIn);
 
   return (
     <header className="flex justify-between items-center px-8 py-5 bg-gradient-to-r from-indigo-900 via-purple-800 to-indigo-900 shadow-lg">
@@ -34,6 +37,14 @@ export default function Header({ hideBooks = false }) {
                 Books
               </Link>
             )}
+            {!shouldHidePosts && (
+              <Link
+                href="/posts"
+                className="text-white hover:text-pink-300 transition-colors font-semibold"
+              >
+                Posts
+              </Link>
+            )}
             <SignInButton mode="modal">
               <button className="text-white hover:text-pink-300 transition-colors font-semibold">
                 Sign In
@@ -53,6 +64,14 @@ export default function Header({ hideBooks = false }) {
                 className="text-white hover:text-pink-300 transition-colors font-semibold"
               >
                 Books
+              </Link>
+            )}
+            {!shouldHidePosts && (
+              <Link
+                href="/posts"
+                className="text-white hover:text-pink-300 transition-colors font-semibold"
+              >
+                Posts
               </Link>
             )}
             <Link
