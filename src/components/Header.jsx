@@ -4,7 +4,7 @@ import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function AuthHeader({ hideBooks = false }) {
+export default function Header({ hideBooks = false }) {
   const { isSignedIn } = useUser();
   const pathname = usePathname();
 

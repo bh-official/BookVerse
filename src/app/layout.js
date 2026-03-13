@@ -1,7 +1,8 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { Unna } from "next/font/google";
 import "./globals.css";
-import AuthHeader from "@/components/AuthHeader";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const unna = Unna({
   weight: "400",
@@ -22,8 +23,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${unna.className} antialiased`}>
         <ClerkProvider>
-          <AuthHeader />
+          <Header />
           {children}
+          <Footer />
         </ClerkProvider>
       </body>
     </html>
