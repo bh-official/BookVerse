@@ -1,6 +1,6 @@
 "use client";
 
-import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/nextjs";
+import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -49,11 +49,6 @@ export default function Header({ hideBooks = false }) {
                 Sign In
               </button>
             </SignInButton>
-            <SignUpButton mode="modal">
-              <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full font-semibold text-sm h-10 px-6 cursor-pointer hover:from-pink-400 hover:to-purple-500 transition-all hover:scale-105 shadow-lg">
-                Sign Up
-              </button>
-            </SignUpButton>
           </>
         ) : (
           <div className="flex items-center gap-6">
