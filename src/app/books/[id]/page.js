@@ -18,7 +18,7 @@ export default async function SingleBookPage({ params }) {
   const reviews = (
     await db.query(
       `
-        SELECT review.content, user_account.username
+        SELECT review.id, review.content, review.user_id, user_account.username
         FROM review 
         JOIN user_account 
         ON review.user_id = user_account.id 
@@ -106,7 +106,17 @@ export default async function SingleBookPage({ params }) {
         <ul className="space-y-4">
           {reviews.map((review) => (
             <li key={review.id} className="border-b pb-4">
-              <p className="font-medium">{review.username}</p>
+              <div className="flex justify-between items-start">
+                <p className="font-medium">{review.username}</p>
+                {review.user_id === user[0].id && (
+                  <Link
+                    href={`/books/${id}/review/${review.id}/edit`}
+                    className="text-sm text-blue-500 hover:underline"
+                  >
+                    Edit
+                  </Link>
+                )}
+              </div>
               <p className="opacity-70 mt-1">{review.content}</p>
             </li>
           ))}

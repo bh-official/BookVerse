@@ -91,7 +91,15 @@ export default async function UserPage() {
                 key={post.id}
                 className="border-b border-gray-100 pb-4 last:border-0"
               >
-                <p className="text-gray-800">{post.content}</p>
+                <div className="flex justify-between items-start">
+                  <p className="text-gray-800">{post.content}</p>
+                  <Link
+                    href={`/users/you/post/${post.id}/edit`}
+                    className="text-sm text-blue-500 hover:underline"
+                  >
+                    Edit
+                  </Link>
+                </div>
                 <p className="text-sm text-gray-400 mt-2">
                   {new Date(post.created_at).toLocaleString("en-US", {
                     year: "numeric",
