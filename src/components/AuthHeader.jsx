@@ -8,7 +8,7 @@ export default function AuthHeader() {
 
   return (
     <header className="flex justify-between items-center px-6 py-4 bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 border-b border-white/10">
-      {/* Logo / Brand */}
+      {/* Logo / Brand - Left side */}
       <Link
         href="/"
         className="text-xl font-bold text-white hover:text-purple-300 transition-colors"
@@ -16,20 +16,16 @@ export default function AuthHeader() {
         📚 BookVerse
       </Link>
 
-      {/* Navigation - visible to everyone */}
-      <nav className="flex items-center gap-8">
-        <Link
-          href="/books"
-          className="text-white hover:text-purple-300 transition-colors font-medium"
-        >
-          Books
-        </Link>
-      </nav>
-
-      {/* Auth Section */}
-      <div className="flex items-center gap-4">
+      {/* Right side - Navigation + Auth */}
+      <div className="flex items-center gap-6">
         {!isSignedIn ? (
           <>
+            <Link
+              href="/books"
+              className="text-white hover:text-purple-300 transition-colors font-medium"
+            >
+              Books
+            </Link>
             <SignInButton mode="modal">
               <button className="text-white hover:text-purple-300 transition-colors font-medium">
                 Sign In
@@ -43,6 +39,12 @@ export default function AuthHeader() {
           </>
         ) : (
           <div className="flex items-center gap-4">
+            <Link
+              href="/books"
+              className="text-white hover:text-purple-300 transition-colors font-medium"
+            >
+              Books
+            </Link>
             <Link
               href="/users/you"
               className="text-white hover:text-purple-300 transition-colors text-sm font-medium"
