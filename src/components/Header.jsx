@@ -9,11 +9,10 @@ export default function Header({ hideBooks = false }) {
   const pathname = usePathname();
 
   // Hide Books and Posts on landing page, books pages, and posts pages
-  // Show Posts on landing page only when signed in
   const isBooksPage = pathname === "/books" || pathname.startsWith("/books/");
   const isPostsPage = pathname === "/posts" || pathname.startsWith("/posts/");
   const shouldHideBooks = hideBooks || isBooksPage || pathname === "/";
-  const shouldHidePosts = isPostsPage || (pathname === "/" && !isSignedIn);
+  const shouldHidePosts = isPostsPage || pathname === "/";
 
   return (
     <header className="flex justify-between items-center px-8 py-5 bg-gradient-to-r from-indigo-900 via-purple-800 to-indigo-900 shadow-lg">

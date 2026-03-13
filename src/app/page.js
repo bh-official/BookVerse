@@ -101,12 +101,20 @@ export default function LandingPage() {
             >
               Explore Books 🚀
             </Link>
-            {!isSignedIn && (
-              <SignUpButton mode="modal">
-                <button className="px-8 py-4 border-2 border-white/30 text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all">
-                  Create Account
-                </button>
-              </SignUpButton>
+            {!isSignedIn ? (
+              <Link
+                href="/posts"
+                className="px-8 py-4 border-2 border-white/30 text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all"
+              >
+                Explore Posts 📝
+              </Link>
+            ) : (
+              <Link
+                href="/posts"
+                className="px-8 py-4 border-2 border-white/30 text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all"
+              >
+                Explore Posts 📝
+              </Link>
             )}
           </motion.div>
         </motion.div>
