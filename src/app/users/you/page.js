@@ -12,8 +12,6 @@ async function createPost(formData) {
   if (!userId) redirect("/sign-in");
 
   const { content } = Object.fromEntries(formData);
-
-  // Get user account ID from clerk_id
   const userDetails = (
     await db.query(`SELECT id FROM user_account WHERE clerk_id = $1`, [userId])
   ).rows;
@@ -31,7 +29,6 @@ async function createPost(formData) {
 export default async function UserPage() {
   const user = await getUser();
 
-  // fetch our reviews
   const reviews = (
     await db.query(
       `
@@ -45,7 +42,6 @@ export default async function UserPage() {
     )
   ).rows;
 
-  // Fetch posts
   const posts = (
     await db.query(
       `SELECT * FROM postss WHERE user_id = $1 ORDER BY created_at DESC`,
@@ -64,135 +60,152 @@ export default async function UserPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-        <div className="flex justify-between items-start mb-4">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">{user[0].username}</h1>
-            <p className="text-gray-600">{user[0].bio || "No bio yet"}</p>
-          </div>
-          <details className="relative">
-            <summary className="cursor-pointer text-gray-500 hover:text-gray-700">
-              ⋮
-            </summary>
-            <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg p-2 z-10">
-              <form action={handleUpdateProfile} className="space-y-2">
-                <input
-                  name="username"
-                  defaultValue={user[0].username}
-                  placeholder="Username"
-                  className="w-full border rounded px-2 py-1 text-sm"
-                />
-                <textarea
-                  name="bio"
-                  defaultValue={user[0].bio || ""}
-                  placeholder="Bio"
-                  className="w-full border rounded px-2 py-1 text-sm h-16"
-                />
-                <button
-                  type="submit"
-                  className="w-full bg-[#6c47ff] text-white rounded py-1 text-sm hover:bg-[#5a3ce6]"
-                >
-                  Save
-                </button>
-              </form>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <div className="max-w-2xl mx-auto p-6">
+        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 mb-8">
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2">
+                {user[0].username}
+              </h1>
+              <p className="text-gray-400">{user[0].bio || "No bio yet"}</p>
             </div>
-          </details>
-        </div>
-      </div>
-
-      {/* Create Post Form */}
-      <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4">Create a Post</h2>
-        <form action={createPost} className="space-y-4">
-          <textarea
-            name="content"
-            placeholder="What's on your mind?"
-            className="w-full p-4 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-[#6c47ff] focus:ring-opacity-50"
-            rows={3}
-            required
-          />
-          <button
-            type="submit"
-            className="bg-[#6c47ff] text-white rounded-full font-semibold py-2 px-6 hover:bg-[#5a3ce6] transition-colors"
-          >
-            Post
-          </button>
-        </form>
-      </div>
-
-      {/* Posts Section */}
-      <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4">Your Posts</h2>
-        {posts.length === 0 ? (
-          <p className="text-gray-500">You haven't posted anything yet.</p>
-        ) : (
-          <div className="space-y-4">
-            {posts.map((post) => (
-              <div
-                key={post.id}
-                className="border-b border-gray-100 pb-4 last:border-0"
-              >
-                <div className="flex justify-between items-start">
-                  <p className="text-gray-800">{post.content}</p>
-                  <div className="flex gap-2">
-                    <Link
-                      href={`/users/you/post/${post.id}/edit`}
-                      className="text-sm text-blue-500 hover:underline"
-                    >
-                      Edit
-                    </Link>
-                    <DeleteButton
-                      action={async () => {
-                        "use server";
-                        await db.query(`DELETE FROM postss WHERE id = $1`, [
-                          post.id,
-                        ]);
-                        redirect("/users/you");
-                      }}
-                      label="Delete"
+            <details className="relative">
+              <summary className="cursor-pointer text-gray-400 hover:text-white">
+                ⋮
+              </summary>
+              <div className="absolute right-0 mt-2 w-56 bg-slate-800 border border-white/10 rounded-lg shadow-lg p-4 z-10">
+                <form action={handleUpdateProfile} className="space-y-3">
+                  <div>
+                    <label className="block text-white text-sm mb-1">
+                      Username
+                    </label>
+                    <input
+                      name="username"
+                      defaultValue={user[0].username}
+                      className="w-full border border-white/20 bg-white/5 rounded px-3 py-2 text-white text-sm"
                     />
                   </div>
-                </div>
-                <p className="text-sm text-gray-400 mt-2">
-                  {new Date(post.created_at).toLocaleString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    timeZoneName: "short",
-                  })}
-                </p>
+                  <div>
+                    <label className="block text-white text-sm mb-1">Bio</label>
+                    <textarea
+                      name="bio"
+                      defaultValue={user[0].bio || ""}
+                      placeholder="Tell us about yourself"
+                      className="w-full border border-white/20 bg-white/5 rounded px-3 py-2 text-white text-sm h-20 resize-none"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-purple-600 text-white rounded py-2 text-sm hover:bg-purple-500 transition-colors"
+                  >
+                    Save Changes
+                  </button>
+                </form>
               </div>
-            ))}
+            </details>
           </div>
-        )}
-      </div>
+        </div>
 
-      {/* Reviews Section */}
-      <div className="bg-white rounded-2xl shadow-lg p-6">
-        <h2 className="text-xl font-semibold mb-4">Your Reviews</h2>
-        {reviews.length === 0 ? (
-          <p className="text-gray-500">You haven't reviewed anything yet</p>
-        ) : (
-          <div className="space-y-4">
-            {reviews.map((review) => (
-              <div
-                key={review.id}
-                className="border-b border-gray-100 pb-4 last:border-0"
-              >
-                <Link
-                  href={`/books/${review.book_id}`}
-                  className="hover:text-[#6c47ff] transition-colors"
+        {/* Create Post Form */}
+        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 mb-8">
+          <h2 className="text-xl font-semibold text-white mb-4">
+            Create a Post
+          </h2>
+          <form action={createPost} className="space-y-4">
+            <textarea
+              name="content"
+              placeholder="What's on your mind?"
+              className="w-full p-4 border border-white/20 bg-white/5 rounded-xl resize-none text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
+              rows={3}
+              required
+            />
+            <button
+              type="submit"
+              className="bg-purple-600 text-white rounded-full font-semibold py-2 px-6 hover:bg-purple-500 transition-colors"
+            >
+              Post
+            </button>
+          </form>
+        </div>
+
+        {/* Posts Section */}
+        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 mb-8">
+          <h2 className="text-xl font-semibold text-white mb-4">Your Posts</h2>
+          {posts.length === 0 ? (
+            <p className="text-gray-500">You haven't posted anything yet.</p>
+          ) : (
+            <div className="space-y-4">
+              {posts.map((post) => (
+                <div
+                  key={post.id}
+                  className="border-b border-white/10 pb-4 last:border-0"
                 >
-                  <strong className="text-lg">{review.title}</strong>
-                </Link>
-                <p className="text-gray-600 mt-2">{review.content}</p>
-              </div>
-            ))}
-          </div>
-        )}
+                  <div className="flex justify-between items-start">
+                    <p className="text-white">{post.content}</p>
+                    <div className="flex gap-2 ml-4">
+                      <Link
+                        href={`/users/you/post/${post.id}/edit`}
+                        className="text-sm text-purple-400 hover:text-purple-300"
+                      >
+                        Edit
+                      </Link>
+                      <DeleteButton
+                        action={async () => {
+                          "use server";
+                          await db.query(`DELETE FROM postss WHERE id = $1`, [
+                            post.id,
+                          ]);
+                          redirect("/users/you");
+                        }}
+                        label="Delete"
+                      />
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-2">
+                    {new Date(post.created_at).toLocaleString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      timeZoneName: "short",
+                    })}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Reviews Section */}
+        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6">
+          <h2 className="text-xl font-semibold text-white mb-4">
+            Your Reviews
+          </h2>
+          {reviews.length === 0 ? (
+            <p className="text-gray-500">You haven't reviewed anything yet</p>
+          ) : (
+            <div className="space-y-4">
+              {reviews.map((review) => (
+                <div
+                  key={review.id}
+                  className="border-b border-white/10 pb-4 last:border-0"
+                >
+                  <Link
+                    href={`/books/${review.book_id}`}
+                    className="hover:text-purple-400 transition-colors"
+                  >
+                    <strong className="text-lg text-white">
+                      {review.title}
+                    </strong>
+                  </Link>
+                  <p className="text-gray-400 mt-2">{review.content}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

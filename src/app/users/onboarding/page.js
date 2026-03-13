@@ -5,11 +5,10 @@ import { db } from "@/utils/db";
 export default function OnboardingPage() {
   async function handleSubmitNewUser(formData) {
     "use server";
-    // we need to submit the username, bio, and clerk id to our database
     const { username, bio } = Object.fromEntries(formData);
     const { userId } = await auth();
 
-    const inserted = await db.query(
+    await db.query(
       `insert into user_account (username, bio, clerk_id) values ($1, $2, $3)`,
       [username, bio, userId],
     );
@@ -18,40 +17,46 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto p-6 mt-10">
-      <div className="bg-white rounded-2xl shadow-lg p-8">
-        <h1 className="text-2xl font-bold mb-2">Welcome!</h1>
-        <p className="text-gray-600 mb-6">
-          Please create your profile to continue.
-        </p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Welcome! 👋</h1>
+          <p className="text-gray-400 mb-6">
+            Create your profile to start your BookVerse journey.
+          </p>
 
-        <form action={handleSubmitNewUser} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Username</label>
-            <input
-              name="username"
-              placeholder="Enter your username"
-              required
-              className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#6c47ff]"
-            />
-          </div>
+          <form action={handleSubmitNewUser} className="space-y-4">
+            <div>
+              <label className="block text-white text-sm font-medium mb-2">
+                Username *
+              </label>
+              <input
+                name="username"
+                placeholder="Enter your username"
+                required
+                className="w-full border border-white/20 bg-white/5 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Bio</label>
-            <textarea
-              name="bio"
-              placeholder="Tell us about yourself"
-              className="w-full border rounded-lg px-4 py-2 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-[#6c47ff]"
-            />
-          </div>
+            <div>
+              <label className="block text-white text-sm font-medium mb-2">
+                Bio
+              </label>
+              <textarea
+                name="bio"
+                placeholder="Tell us about yourself"
+                className="w-full border border-white/20 bg-white/5 rounded-lg px-4 py-3 h-24 resize-none text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
+              />
+            </div>
 
-          <button
-            type="submit"
-            className="w-full bg-[#6c47ff] text-white rounded-full font-semibold py-3 hover:bg-[#5a3ce6] transition-colors"
-          >
-            Create Profile
-          </button>
-        </form>
+            <button
+              type="submit"
+              className="w-full bg-purple-600 text-white rounded-full font-semibold py-3 hover:bg-purple-500 transition-colors mt-6"
+            >
+              Create Profile
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

@@ -5,17 +5,25 @@ import Link from "next/link";
 import DeleteButton from "@/components/DeleteButton";
 
 export default async function SingleBookPage({ params }) {
-  // get user (can be null if not logged in)
   const user = await getUser();
-
-  // get the book id form the URL params
   const { id } = await params;
 
-  // get the book from the database by its id
   const book = (await db.query(`SELECT * FROM books WHERE id = $1`, [id]))
     .rows[0];
 
-  // if the book doesnt exist we could redirect or show a message
+  if (!book) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-white text-xl mb-4">Book not found</p>
+          <Link href="/books" className="text-purple-400 hover:text-purple-300">
+            ← Back to Books
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   const reviews = (
     await db.query(
       `
@@ -30,129 +38,132 @@ export default async function SingleBookPage({ params }) {
 
   async function handleSubmitReview(formData) {
     "use server";
-    // extract content value from form
     const { content } = Object.fromEntries(formData);
-
-    // get the currently logged in user details
     const user = await getUser();
-
-    console.log(user);
-
     await db.query(
       `insert into review (user_id, book_id, content) values ($1, $2, $3)`,
       [user[0].id, id, content],
     );
-
-    // redirect to same page so they can see the new review
     redirect(`/books/${id}`);
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <div className="flex gap-8 mb-10">
-        {book.img_url && (
-          <img
-            src={book.img_url}
-            alt={book.title}
-            className="w-48 aspect-[2/3] object-cover rounded shrink-0"
-          />
-        )}
-        <div className="flex-1">
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-3xl">{book.title}</h1>
-              <p className="opacity-60 mt-1">by {book.author}</p>
-              {book.released && (
-                <p className="text-sm opacity-40 mt-1">
-                  {new Date(book.released).toLocaleDateString()}
-                </p>
-              )}
-            </div>
-            {book.user_id && user && book.user_id === user[0].id && (
-              <div className="flex gap-2">
-                <Link
-                  href={`/books/${id}/edit`}
-                  className="px-3 py-1 text-sm border rounded hover:bg-gray-50 transition-colors"
-                >
-                  Edit
-                </Link>
-                <DeleteButton
-                  action={async () => {
-                    "use server";
-                    await db.query(`DELETE FROM books WHERE id = $1`, [id]);
-                    redirect(`/books`);
-                  }}
-                />
-              </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <div className="max-w-3xl mx-auto p-6">
+        <Link
+          href="/books"
+          className="text-purple-400 hover:text-purple-300 mb-6 inline-block"
+        >
+          ← Back to Books
+        </Link>
+
+        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8">
+          <div className="flex gap-8 mb-10">
+            {book.img_url && (
+              <img
+                src={book.img_url}
+                alt={book.title}
+                className="w-48 aspect-[2/3] object-cover rounded-lg shrink-0 shadow-lg"
+              />
             )}
-          </div>
-          {book.description && <p className="mt-4">{book.description}</p>}
-          {book.quote && (
-            <p className="mt-4 italic opacity-70">"{book.quote}"</p>
-          )}
-        </div>
-      </div>
-
-      <h2 className="text-xl mb-3">Leave a Review</h2>
-      {user ? (
-        <form className="mb-10" action={handleSubmitReview}>
-          <textarea
-            name="content"
-            placeholder="Write your review..."
-            required
-            className="w-full border rounded p-3 resize-none h-24"
-          />
-          <button
-            type="submit"
-            className="mt-2 px-4 py-2 bg-black text-white rounded hover:opacity-80 transition-opacity cursor-pointer"
-          >
-            Submit Review
-          </button>
-        </form>
-      ) : (
-        <p className="mb-10 text-gray-500">
-          <Link href="/sign-in" className="text-blue-500 hover:underline">
-            Sign in
-          </Link>{" "}
-          to leave a review
-        </p>
-      )}
-
-      <h2 className="text-xl mb-3">Reviews</h2>
-      {reviews.length === 0 ? (
-        <p className="opacity-50">No reviews yet. Be the first!</p>
-      ) : (
-        <ul className="space-y-4">
-          {reviews.map((review) => (
-            <li key={review.id} className="border-b pb-4">
+            <div className="flex-1">
               <div className="flex justify-between items-start">
-                <p className="font-medium">{review.username}</p>
-                {review.user_id && user && review.user_id === user[0].id && (
+                <div>
+                  <h1 className="text-3xl font-bold text-white">
+                    {book.title}
+                  </h1>
+                  <p className="text-gray-400 mt-1">by {book.author}</p>
+                  {book.released && (
+                    <p className="text-sm text-gray-500 mt-1">
+                      {new Date(book.released).toLocaleDateString()}
+                    </p>
+                  )}
+                </div>
+                {book.user_id && user && book.user_id === user[0].id && (
                   <div className="flex gap-2">
                     <Link
-                      href={`/books/${id}/review/${review.id}/edit`}
-                      className="text-sm text-blue-500 hover:underline"
+                      href={`/books/${id}/edit`}
+                      className="px-3 py-1 text-sm border border-white/20 text-white rounded hover:bg-white/10 transition-colors"
                     >
                       Edit
                     </Link>
                     <DeleteButton
                       action={async () => {
                         "use server";
-                        await db.query(`DELETE FROM review WHERE id = $1`, [
-                          review.id,
-                        ]);
-                        redirect(`/books/${id}`);
+                        await db.query(`DELETE FROM books WHERE id = $1`, [id]);
+                        redirect(`/books`);
                       }}
-                      label="Delete"
                     />
                   </div>
                 )}
               </div>
-              <p className="opacity-70 mt-1">{review.content}</p>
-            </li>
-          ))}
-        </ul>
-      )}
+              {book.description && (
+                <p className="mt-4 text-gray-300">{book.description}</p>
+              )}
+              {book.quote && (
+                <p className="mt-4 italic text-gray-400">"{book.quote}"</p>
+              )}
+            </div>
+          </div>
+
+          <h2 className="text-xl font-semibold text-white mb-3">
+            Leave a Review
+          </h2>
+          <form className="mb-10" action={handleSubmitReview}>
+            <textarea
+              name="content"
+              placeholder="Write your review..."
+              required
+              className="w-full border border-white/20 bg-white/5 rounded p-3 resize-none h-24 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
+            />
+            <button
+              type="submit"
+              className="mt-2 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-500 transition-colors"
+            >
+              Submit Review
+            </button>
+          </form>
+
+          <h2 className="text-xl font-semibold text-white mb-3">Reviews</h2>
+          {reviews.length === 0 ? (
+            <p className="text-gray-500">No reviews yet. Be the first!</p>
+          ) : (
+            <ul className="space-y-4">
+              {reviews.map((review) => (
+                <li key={review.id} className="border-b border-white/10 pb-4">
+                  <div className="flex justify-between items-start">
+                    <p className="font-medium text-white">{review.username}</p>
+                    {review.user_id &&
+                      user &&
+                      review.user_id === user[0].id && (
+                        <div className="flex gap-2">
+                          <Link
+                            href={`/books/${id}/review/${review.id}/edit`}
+                            className="text-sm text-purple-400 hover:text-purple-300"
+                          >
+                            Edit
+                          </Link>
+                          <DeleteButton
+                            action={async () => {
+                              "use server";
+                              await db.query(
+                                `DELETE FROM review WHERE id = $1`,
+                                [review.id],
+                              );
+                              redirect(`/books/${id}`);
+                            }}
+                            label="Delete"
+                          />
+                        </div>
+                      )}
+                  </div>
+                  <p className="text-gray-400 mt-1">{review.content}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

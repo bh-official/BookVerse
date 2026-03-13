@@ -37,16 +37,8 @@ const features = [
   },
 ];
 
-const floatingBooks = [
-  { x: "10%", y: "20%", delay: 0 },
-  { x: "80%", y: "15%", delay: 0.2 },
-  { x: "15%", y: "70%", delay: 0.4 },
-  { x: "75%", y: "65%", delay: 0.6 },
-  { x: "50%", y: "80%", delay: 0.8 },
-];
-
 export default function LandingPage() {
-  const { isSignedIn, user } = useUser();
+  const { isSignedIn } = useUser();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden">
@@ -57,40 +49,26 @@ export default function LandingPage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
       </div>
 
-      {/* Floating Books */}
-      {floatingBooks.map((book, i) => (
-        <motion.div
-          key={i}
-          className="absolute text-6xl opacity-20"
-          initial={{ y: -100, opacity: 0, rotate: 0 }}
-          animate={{
-            y: [0, -20, 0],
-            opacity: 0.15,
-            rotate: [0, 10, -10, 0],
-          }}
-          transition={{
-            duration: 6,
-            delay: book.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          style={{ left: book.x, top: book.y }}
-        >
-          📖
-        </motion.div>
-      ))}
-
       {/* Nav */}
       <nav className="relative z-10 flex justify-between items-center p-6 max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="text-2xl font-bold text-white"
-        >
+        <Link href="/" className="text-2xl font-bold text-white">
           📚 BookVerse
-        </motion.div>
-        <div className="flex gap-4">
-          {!isSignedIn ? (
+        </Link>
+        <div className="flex gap-4 items-center">
+          <Link
+            href="/books"
+            className="px-4 py-2 text-white hover:text-purple-300 transition-colors"
+          >
+            Books
+          </Link>
+          {isSignedIn ? (
+            <Link
+              href="/users/you"
+              className="px-6 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition-all"
+            >
+              My Profile
+            </Link>
+          ) : (
             <>
               <SignInButton mode="modal">
                 <button className="px-4 py-2 text-white hover:text-purple-300 transition-colors">
@@ -98,24 +76,17 @@ export default function LandingPage() {
                 </button>
               </SignInButton>
               <SignUpButton mode="modal">
-                <button className="px-6 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition-all hover:scale-105">
+                <button className="px-6 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition-all">
                   Get Started
                 </button>
               </SignUpButton>
             </>
-          ) : (
-            <Link
-              href="/books"
-              className="px-6 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition-all hover:scale-105"
-            >
-              Go to Books
-            </Link>
           )}
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative z-10 flex flex-col items-center justify-center min-h-[80vh] px-4 text-center">
+      <section className="relative z-10 flex flex-col items-center justify-center min-h-[70vh] px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -160,52 +131,19 @@ export default function LandingPage() {
             transition={{ delay: 0.5 }}
             className="flex flex-wrap justify-center gap-4"
           >
-            {!isSignedIn ? (
-              <>
-                <SignUpButton mode="modal">
-                  <button className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold text-lg hover:scale-105 transition-transform hover:shadow-lg hover:shadow-purple-500/25">
-                    Start Exploring 🚀
-                  </button>
-                </SignUpButton>
-                <Link
-                  href="/books"
-                  className="px-8 py-4 border-2 border-white/30 text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all"
-                >
-                  Browse Books
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/books"
-                  className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold text-lg hover:scale-105 transition-transform hover:shadow-lg hover:shadow-purple-500/25"
-                >
-                  Explore Books 🚀
-                </Link>
-                <Link
-                  href="/users/you"
-                  className="px-8 py-4 border-2 border-white/30 text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all"
-                >
-                  My Profile
-                </Link>
-              </>
+            <Link
+              href="/books"
+              className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-semibold text-lg hover:scale-105 transition-transform hover:shadow-lg hover:shadow-purple-500/25"
+            >
+              Explore Books 🚀
+            </Link>
+            {!isSignedIn && (
+              <SignUpButton mode="modal">
+                <button className="px-8 py-4 border-2 border-white/30 text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all">
+                  Create Account
+                </button>
+              </SignUpButton>
             )}
-          </motion.div>
-        </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 1 }}
-          className="absolute bottom-10"
-        >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="text-white/50 text-2xl"
-          >
-            ↓
           </motion.div>
         </motion.div>
       </section>
