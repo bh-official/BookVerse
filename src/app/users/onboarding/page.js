@@ -14,18 +14,45 @@ export default function OnboardingPage() {
       [username, bio, userId],
     );
 
-    redirect(`/users/${userId}`);
+    redirect(`/users/you`);
   }
 
   return (
-    <div>
-      <h2>Sign up to our website: please make a profile</h2>
+    <div className="max-w-md mx-auto p-6 mt-10">
+      <div className="bg-white rounded-2xl shadow-lg p-8">
+        <h1 className="text-2xl font-bold mb-2">Welcome!</h1>
+        <p className="text-gray-600 mb-6">
+          Please create your profile to continue.
+        </p>
 
-      <form action={handleSubmitNewUser}>
-        <input name="username" placeholder="username" />
-        <input name="bio" placeholder="bio" />
-        <button type="submit">Submit</button>
-      </form>
+        <form action={handleSubmitNewUser} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">Username</label>
+            <input
+              name="username"
+              placeholder="Enter your username"
+              required
+              className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#6c47ff]"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Bio</label>
+            <textarea
+              name="bio"
+              placeholder="Tell us about yourself"
+              className="w-full border rounded-lg px-4 py-2 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-[#6c47ff]"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-[#6c47ff] text-white rounded-full font-semibold py-3 hover:bg-[#5a3ce6] transition-colors"
+          >
+            Create Profile
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

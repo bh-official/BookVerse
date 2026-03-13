@@ -53,11 +53,52 @@ export default async function UserPage() {
     )
   ).rows;
 
+  async function handleUpdateProfile(formData) {
+    "use server";
+    const { username, bio } = Object.fromEntries(formData);
+    await db.query(
+      `UPDATE user_account SET username = $1, bio = $2 WHERE id = $3`,
+      [username, bio, user[0].id],
+    );
+    redirect("/users/you");
+  }
+
   return (
     <div className="max-w-2xl mx-auto p-6">
       <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-        <h1 className="text-3xl font-bold mb-2">{user[0].username}</h1>
-        <p className="text-gray-600 mb-4">{user[0].bio || "No bio yet"}</p>
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">{user[0].username}</h1>
+            <p className="text-gray-600">{user[0].bio || "No bio yet"}</p>
+          </div>
+          <details className="relative">
+            <summary className="cursor-pointer text-gray-500 hover:text-gray-700">
+              ⋮
+            </summary>
+            <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg p-2 z-10">
+              <form action={handleUpdateProfile} className="space-y-2">
+                <input
+                  name="username"
+                  defaultValue={user[0].username}
+                  placeholder="Username"
+                  className="w-full border rounded px-2 py-1 text-sm"
+                />
+                <textarea
+                  name="bio"
+                  defaultValue={user[0].bio || ""}
+                  placeholder="Bio"
+                  className="w-full border rounded px-2 py-1 text-sm h-16"
+                />
+                <button
+                  type="submit"
+                  className="w-full bg-[#6c47ff] text-white rounded py-1 text-sm hover:bg-[#5a3ce6]"
+                >
+                  Save
+                </button>
+              </form>
+            </div>
+          </details>
+        </div>
       </div>
 
       {/* Create Post Form */}
