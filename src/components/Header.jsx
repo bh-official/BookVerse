@@ -15,7 +15,7 @@ export default function Header({ hideBooks = false }) {
   const shouldHidePosts = isPostsPage || pathname === "/";
 
   return (
-    <header className="flex justify-between items-center px-8 py-5 bg-gradient-to-r from-indigo-900 via-purple-800 to-indigo-900 shadow-lg">
+    <header className="flex justify-between items-center px-8 py-8 bg-gradient-to-r from-indigo-900 via-purple-800 to-indigo-900 shadow-lg">
       {/* Logo / Brand - Left side */}
       <Link
         href="/"
