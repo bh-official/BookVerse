@@ -41,49 +41,13 @@ export default function LandingPage() {
   const { isSignedIn } = useUser();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 -z-10">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500/30 rounded-full blur-3xl" />
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500/30 rounded-full blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
       </div>
-
-      {/* Nav */}
-      <nav className="relative z-10 flex justify-between items-center p-6 max-w-7xl mx-auto">
-        <Link href="/" className="text-2xl font-bold text-white">
-          📚 BookVerse
-        </Link>
-        <div className="flex gap-4 items-center">
-          <Link
-            href="/books"
-            className="px-4 py-2 text-white hover:text-purple-300 transition-colors"
-          >
-            Books
-          </Link>
-          {isSignedIn ? (
-            <Link
-              href="/users/you"
-              className="px-6 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition-all"
-            >
-              My Profile
-            </Link>
-          ) : (
-            <>
-              <SignInButton mode="modal">
-                <button className="px-4 py-2 text-white hover:text-purple-300 transition-colors">
-                  Sign In
-                </button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <button className="px-6 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition-all">
-                  Get Started
-                </button>
-              </SignUpButton>
-            </>
-          )}
-        </div>
-      </nav>
 
       {/* Hero Section */}
       <section className="relative z-10 flex flex-col items-center justify-center min-h-[70vh] px-4 text-center">
@@ -221,22 +185,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="relative z-10 py-8 px-4 border-t border-white/10">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-white/60">
-            © 2026 BookVerse. Built with Next.js & PostgreSQL.
-          </div>
-          <div className="flex gap-6 text-white/60">
-            <Link href="/books" className="hover:text-white transition-colors">
-              Books
-            </Link>
-            {isSignedIn && (
-              <Link
-                href="/users/you"
-                className="hover:text-white transition-colors"
-              >
-                Profile
-              </Link>
-            )}
-          </div>
+          <div className="text-white/60">© 2026 BookVerse.</div>
         </div>
       </footer>
     </div>
