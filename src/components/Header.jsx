@@ -19,9 +19,12 @@ export default function Header({ hideBooks = false }) {
       {/* Logo / Brand - Left side */}
       <Link
         href="/"
-        className="text-2xl font-bold text-white hover:text-pink-300 transition-colors"
+        className="flex flex-col text-2xl font-bold text-white hover:text-pink-300 transition-colors"
       >
-        📚 BookVerse
+        <span>📚 BookVerse</span>
+        <span className="text-xs font-normal text-purple-300">
+          Your Gateway to the Book Universe
+        </span>
       </Link>
 
       {/* Right side - Navigation + Auth */}
