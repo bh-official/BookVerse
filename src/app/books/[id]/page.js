@@ -68,12 +68,28 @@ export default async function SingleBookPage({ params }) {
               )}
             </div>
             {book.user_id === user[0].id && (
-              <Link
-                href={`/books/${id}/edit`}
-                className="px-3 py-1 text-sm border rounded hover:bg-gray-50 transition-colors"
-              >
-                Edit
-              </Link>
+              <div className="flex gap-2">
+                <Link
+                  href={`/books/${id}/edit`}
+                  className="px-3 py-1 text-sm border rounded hover:bg-gray-50 transition-colors"
+                >
+                  Edit
+                </Link>
+                <form
+                  action={async () => {
+                    "use server";
+                    await db.query(`DELETE FROM books WHERE id = $1`, [id]);
+                    redirect(`/books`);
+                  }}
+                >
+                  <button
+                    type="submit"
+                    className="px-3 py-1 text-sm border border-red-300 text-red-600 rounded hover:bg-red-50 transition-colors cursor-pointer"
+                  >
+                    Delete
+                  </button>
+                </form>
+              </div>
             )}
           </div>
           {book.description && <p className="mt-4">{book.description}</p>}
@@ -109,12 +125,30 @@ export default async function SingleBookPage({ params }) {
               <div className="flex justify-between items-start">
                 <p className="font-medium">{review.username}</p>
                 {review.user_id === user[0].id && (
-                  <Link
-                    href={`/books/${id}/review/${review.id}/edit`}
-                    className="text-sm text-blue-500 hover:underline"
-                  >
-                    Edit
-                  </Link>
+                  <div className="flex gap-2">
+                    <Link
+                      href={`/books/${id}/review/${review.id}/edit`}
+                      className="text-sm text-blue-500 hover:underline"
+                    >
+                      Edit
+                    </Link>
+                    <form
+                      action={async () => {
+                        "use server";
+                        await db.query(`DELETE FROM review WHERE id = $1`, [
+                          review.id,
+                        ]);
+                        redirect(`/books/${id}`);
+                      }}
+                    >
+                      <button
+                        type="submit"
+                        className="text-sm text-red-500 hover:underline cursor-pointer"
+                      >
+                        Delete
+                      </button>
+                    </form>
+                  </div>
                 )}
               </div>
               <p className="opacity-70 mt-1">{review.content}</p>

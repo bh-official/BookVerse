@@ -93,12 +93,30 @@ export default async function UserPage() {
               >
                 <div className="flex justify-between items-start">
                   <p className="text-gray-800">{post.content}</p>
-                  <Link
-                    href={`/users/you/post/${post.id}/edit`}
-                    className="text-sm text-blue-500 hover:underline"
-                  >
-                    Edit
-                  </Link>
+                  <div className="flex gap-2">
+                    <Link
+                      href={`/users/you/post/${post.id}/edit`}
+                      className="text-sm text-blue-500 hover:underline"
+                    >
+                      Edit
+                    </Link>
+                    <form
+                      action={async () => {
+                        "use server";
+                        await db.query(`DELETE FROM postss WHERE id = $1`, [
+                          post.id,
+                        ]);
+                        redirect("/users/you");
+                      }}
+                    >
+                      <button
+                        type="submit"
+                        className="text-sm text-red-500 hover:underline cursor-pointer"
+                      >
+                        Delete
+                      </button>
+                    </form>
+                  </div>
                 </div>
                 <p className="text-sm text-gray-400 mt-2">
                   {new Date(post.created_at).toLocaleString("en-US", {
