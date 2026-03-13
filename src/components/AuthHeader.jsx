@@ -7,10 +7,10 @@ import { usePathname } from "next/navigation";
 export default function AuthHeader({ hideBooks = false }) {
   const { isSignedIn } = useUser();
   const pathname = usePathname();
-  const isLandingPage = pathname === "/";
 
-  // Auto-hide books on landing page unless explicitly shown
-  const shouldHideBooks = hideBooks || isLandingPage;
+  // Hide Books on landing page and books pages
+  const isBooksPage = pathname === "/books" || pathname.startsWith("/books/");
+  const shouldHideBooks = hideBooks || isBooksPage || pathname === "/";
 
   return (
     <header className="flex justify-between items-center px-8 py-5 bg-gradient-to-r from-indigo-900 via-purple-800 to-indigo-900 shadow-lg">
