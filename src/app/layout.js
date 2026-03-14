@@ -21,10 +21,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${unna.className} antialiased`}>
+      <body className={`${unna.className} antialiased overflow-x-hidden`}>
         <ClerkProvider>
           <Header />
-          {children}
+          <main className="min-h-screen">{children}</main>
           <Footer />
         </ClerkProvider>
       </body>

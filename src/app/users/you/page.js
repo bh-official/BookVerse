@@ -2,7 +2,7 @@ import { getUser } from "@/utils/getUser";
 import { db } from "@/utils/db";
 import Link from "next/link";
 import { revalidatePath } from "next/cache";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import DeleteButton from "@/components/DeleteButton";
 import LikeButton from "@/components/LikeButton";
@@ -60,6 +60,8 @@ async function createPost(formData) {
 
 export default async function UserPage() {
   const user = await getUser();
+  const clerkUser = await currentUser();
+  const userImage = clerkUser?.imageUrl || null;
 
   const reviews = (
     await db.query(
@@ -195,10 +197,20 @@ export default async function UserPage() {
         <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 mb-8 relative z-50 overflow-visible">
           <div className="flex justify-between items-start mb-4">
             <div className="flex items-center gap-4">
-              <div
-                className={`w-16 h-16 bg-linear-to-r ${getAvatarColor(user[0].username || "")} rounded-full flex items-center justify-center text-white text-2xl font-bold shrink-0`}
-              >
-                {user[0].username ? user[0].username[0].toUpperCase() : "?"}
+              <div className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold shrink-0 overflow-hidden border-2 border-pink-400">
+                {userImage ? (
+                  <img
+                    src={userImage}
+                    alt={user[0].username}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div
+                    className={`w-full h-full bg-linear-to-r ${getAvatarColor(user[0].username || "")} flex items-center justify-center`}
+                  >
+                    {user[0].username ? user[0].username[0].toUpperCase() : "?"}
+                  </div>
+                )}
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-white mb-2">
