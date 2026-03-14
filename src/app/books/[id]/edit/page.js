@@ -45,9 +45,30 @@ export default async function EditBookPage({ params }) {
     "use server";
     const { title, author, description, quote, released, img_url } =
       Object.fromEntries(formData);
+
+    // Validate - trim whitespace and check if empty
+    const trimmedTitle = title?.trim();
+    const trimmedAuthor = author?.trim();
+
+    if (!trimmedTitle || trimmedTitle.length === 0) {
+      return { error: "Title cannot be empty" };
+    }
+
+    if (!trimmedAuthor || trimmedAuthor.length === 0) {
+      return { error: "Author cannot be empty" };
+    }
+
     await db.query(
       `UPDATE books SET title = $1, author = $2, description = $3, quote = $4, released = $5, img_url = $6 WHERE id = $7`,
-      [title, author, description, quote, released, img_url, id],
+      [
+        trimmedTitle,
+        trimmedAuthor,
+        description?.trim() || null,
+        quote?.trim() || null,
+        released || null,
+        img_url?.trim() || null,
+        id,
+      ],
     );
     redirect(`/books/${id}`);
   }

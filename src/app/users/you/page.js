@@ -13,6 +13,14 @@ async function createPost(formData) {
   if (!userId) redirect("/sign-in");
 
   const { content } = Object.fromEntries(formData);
+
+  // Validate - trim whitespace and check if empty
+  const trimmedContent = content?.trim();
+
+  if (!trimmedContent || trimmedContent.length === 0) {
+    return { error: "Post content cannot be empty" };
+  }
+
   const userDetails = (
     await db.query(`SELECT id FROM user_account WHERE clerk_id = $1`, [userId])
   ).rows;
@@ -20,7 +28,7 @@ async function createPost(formData) {
   if (userDetails.length > 0) {
     await db.query(`INSERT INTO posts (user_id, content) VALUES ($1, $2)`, [
       userDetails[0].id,
-      content,
+      trimmedContent,
     ]);
   }
 
@@ -92,9 +100,22 @@ export default async function UserPage() {
   async function handleUpdateProfile(formData) {
     "use server";
     const { username, bio } = Object.fromEntries(formData);
+
+    // Validate - trim whitespace and check if empty
+    const trimmedUsername = username?.trim();
+    const trimmedBio = bio?.trim();
+
+    if (!trimmedUsername || trimmedUsername.length === 0) {
+      return { error: "Username cannot be empty" };
+    }
+
+    if (!trimmedBio || trimmedBio.length === 0) {
+      return { error: "Bio cannot be empty" };
+    }
+
     await db.query(
       `UPDATE user_account SET username = $1, bio = $2 WHERE id = $3`,
-      [username, bio, user[0].id],
+      [trimmedUsername, trimmedBio, user[0].id],
     );
     redirect("/users/you");
   }

@@ -8,9 +8,21 @@ export default function OnboardingPage() {
     const { username, bio } = Object.fromEntries(formData);
     const { userId } = await auth();
 
+    // Validate - trim whitespace and check if empty
+    const trimmedUsername = username?.trim();
+    const trimmedBio = bio?.trim();
+
+    if (!trimmedUsername || trimmedUsername.length === 0) {
+      return { error: "Username cannot be empty" };
+    }
+
+    if (!trimmedBio || trimmedBio.length === 0) {
+      return { error: "Bio cannot be empty" };
+    }
+
     await db.query(
       `insert into user_account (username, bio, clerk_id) values ($1, $2, $3)`,
-      [username, bio, userId],
+      [trimmedUsername, trimmedBio, userId],
     );
 
     redirect(`/users/you`);

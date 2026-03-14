@@ -10,10 +10,31 @@ export default async function NewBookPage() {
     "use server";
     const { title, author, description, quote, released, img_url } =
       Object.fromEntries(formData);
+
+    // Validate - trim whitespace and check if empty
+    const trimmedTitle = title?.trim();
+    const trimmedAuthor = author?.trim();
+
+    if (!trimmedTitle || trimmedTitle.length === 0) {
+      return { error: "Title cannot be empty" };
+    }
+
+    if (!trimmedAuthor || trimmedAuthor.length === 0) {
+      return { error: "Author cannot be empty" };
+    }
+
     const user = await getUser();
     const result = await db.query(
       `INSERT INTO books (user_id, title, author, description, quote, released, img_url) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
-      [user[0].id, title, author, description, quote, released, img_url],
+      [
+        user[0].id,
+        trimmedTitle,
+        trimmedAuthor,
+        description?.trim() || null,
+        quote?.trim() || null,
+        released || null,
+        img_url?.trim() || null,
+      ],
     );
     redirect(`/books/${result.rows[0].id}`);
   }

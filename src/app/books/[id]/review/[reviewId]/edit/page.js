@@ -48,8 +48,16 @@ export default async function EditReviewPage({ params }) {
   async function handleUpdateReview(formData) {
     "use server";
     const { content } = Object.fromEntries(formData);
+
+    // Validate - trim whitespace and check if empty
+    const trimmedContent = content?.trim();
+
+    if (!trimmedContent || trimmedContent.length === 0) {
+      return { error: "Review cannot be empty" };
+    }
+
     await db.query(`UPDATE review SET content = $1 WHERE id = $2`, [
-      content,
+      trimmedContent,
       reviewId,
     ]);
     redirect(`/books/${bookId}`);

@@ -39,10 +39,18 @@ export default async function SingleBookPage({ params }) {
   async function handleSubmitReview(formData) {
     "use server";
     const { content } = Object.fromEntries(formData);
+
+    // Validate - trim whitespace and check if empty
+    const trimmedContent = content?.trim();
+
+    if (!trimmedContent || trimmedContent.length === 0) {
+      return { error: "Review cannot be empty" };
+    }
+
     const user = await getUser();
     await db.query(
       `insert into review (user_id, book_id, content) values ($1, $2, $3)`,
-      [user[0].id, id, content],
+      [user[0].id, id, trimmedContent],
     );
     redirect(`/books/${id}`);
   }
