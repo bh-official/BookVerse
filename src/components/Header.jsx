@@ -14,6 +14,7 @@ export default function Header({ hideBooks = false }) {
   const isPostsPage = pathname === "/posts" || pathname.startsWith("/posts/");
   const shouldHideBooks = hideBooks || isBooksPage || pathname === "/";
   const shouldHidePosts = isPostsPage || pathname === "/";
+  const shouldHideCategories = pathname === "/";
 
   return (
     <header className="flex justify-between items-center px-8 py-8 h-24 bg-gradient-to-r from-indigo-900 via-purple-800 to-indigo-900 shadow-lg">
@@ -42,12 +43,14 @@ export default function Header({ hideBooks = false }) {
                 Posts
               </Link>
             )}
-            <Link
-              href="/categories"
-              className="text-white hover:text-pink-300 transition-colors font-semibold"
-            >
-              Categories
-            </Link>
+            {!shouldHideCategories && (
+              <Link
+                href="/categories"
+                className="text-white hover:text-pink-300 transition-colors font-semibold"
+              >
+                Categories
+              </Link>
+            )}
             <SignInButton mode="modal">
               <button className="text-white hover:text-pink-300 transition-colors font-semibold">
                 Sign In
@@ -72,12 +75,14 @@ export default function Header({ hideBooks = false }) {
                 Posts
               </Link>
             )}
-            <Link
-              href="/categories"
-              className="text-white hover:text-pink-300 transition-colors font-semibold"
-            >
-              Categories
-            </Link>
+            {!shouldHideCategories && (
+              <Link
+                href="/categories"
+                className="text-white hover:text-pink-300 transition-colors font-semibold"
+              >
+                Categories
+              </Link>
+            )}
             <Link
               href="/users/you"
               className="text-white hover:text-pink-300 transition-colors font-semibold"
