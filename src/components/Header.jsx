@@ -99,6 +99,25 @@ export default function Header({ hideBooks = false }) {
                 elements: {
                   avatarBox:
                     "w-10 h-10 border-2 border-pink-400 ring-2 ring-purple-500/50",
+                  // User menu dropdown styling
+                  userButtonPopover:
+                    "bg-slate-800 border border-purple-500 rounded-lg shadow-xl",
+                  userButtonPopoverActionButton:
+                    "text-white hover:bg-purple-700 transition-colors",
+                  userButtonPopoverActionButtonText: "text-white",
+                  userButtonPopoverFooter: "border-t border-purple-500",
+                  userButtonTrigger: "w-10 h-10",
+                  // Dropdown menu items
+                  userButtonMenuItems:
+                    "bg-slate-800 hover:bg-purple-700 transition-colors",
+                  // Sign in button styling
+                  formButtonPrimary:
+                    "bg-purple-600 hover:bg-purple-700 text-white",
+                  // Card styling
+                  card: "bg-slate-800 border border-purple-500",
+                  // Input styling
+                  input: "bg-slate-700 border-purple-500 text-white",
+                  label: "text-purple-300",
                 },
               }}
             />
