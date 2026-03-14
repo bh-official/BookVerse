@@ -7,33 +7,43 @@ import { SignInButton, SignUpButton, useUser } from "@clerk/nextjs";
 const features = [
   {
     icon: "📚",
-    title: "Discover Books",
-    description: "Explore a vast collection of books shared by our community",
+    title: "Browse Books",
+    description: "Explore books by title, author, or category",
   },
   {
-    icon: "✍️",
-    title: "Write Reviews",
-    description: "Share your thoughts and rate books you've read",
+    icon: "⭐",
+    title: "Book Reviews",
+    description: "Read and write reviews for your favorite books",
   },
   {
     icon: "📝",
     title: "Create Posts",
-    description: "Post updates, recommendations, and book-related content",
+    description: "Share recommendations, updates, and thoughts",
   },
   {
     icon: "👤",
-    title: "Personal Profile",
-    description: "Build your reading identity with a customizable profile",
+    title: "User Profiles",
+    description: "Build your reading identity with bio and avatar",
   },
   {
-    icon: "🔐",
-    title: "Secure Auth",
-    description: "Powered by Clerk for safe and easy authentication",
+    icon: "❤️",
+    title: "Like Posts",
+    description: "Show appreciation for posts you love",
   },
   {
-    icon: "🚀",
-    title: "Full Stack",
-    description: "Built with Next.js, PostgreSQL, and modern tech",
+    icon: "🔗",
+    title: "Follow Users",
+    description: "Connect with fellow book lovers",
+  },
+  {
+    icon: "🏷️",
+    title: "Categories",
+    description: "Browse books by genre: Fiction, Horror, Romance & more",
+  },
+  {
+    icon: "💬",
+    title: "Engage Community",
+    description: "Comment on posts and join discussions",
   },
 ];
 
