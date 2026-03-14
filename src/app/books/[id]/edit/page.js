@@ -2,29 +2,7 @@ import { db } from "@/utils/db";
 import { getUser } from "@/utils/getUser";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-
-const BOOK_CATEGORIES = [
-  "Fiction",
-  "Non-Fiction",
-  "Horror",
-  "Fantasy",
-  "Comedy",
-  "Jokes",
-  "Funny",
-  "Children",
-  "Romance",
-  "Mystery",
-  "Thriller",
-  "Science Fiction",
-  "Biography",
-  "History",
-  "Self-Help",
-  "Poetry",
-  "Drama",
-  "Adventure",
-  "Crime",
-  "Dystopian",
-];
+import { BOOK_CATEGORIES } from "@/utils/categories";
 
 export default async function EditBookPage({ params }) {
   const user = await getUser();

@@ -1,34 +1,11 @@
 import { db } from "@/utils/db";
 import Link from "next/link";
-import { Metadata } from "next";
+import { BOOK_CATEGORIES, getCategoryEmoji } from "@/utils/categories";
 
 export const metadata = {
   title: "Categories - BookVerse",
   description: "Browse books by category on BookVerse",
 };
-
-const BOOK_CATEGORIES = [
-  "Fiction",
-  "Non-Fiction",
-  "Horror",
-  "Fantasy",
-  "Comedy",
-  "Jokes",
-  "Funny",
-  "Children",
-  "Romance",
-  "Mystery",
-  "Thriller",
-  "Science Fiction",
-  "Biography",
-  "History",
-  "Self-Help",
-  "Poetry",
-  "Drama",
-  "Adventure",
-  "Crime",
-  "Dystopian",
-];
 
 export default async function CategoriesPage() {
   // Get book count for each category

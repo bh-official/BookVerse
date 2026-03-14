@@ -4,30 +4,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import LikeButton from "@/components/LikeButton";
-
-// Generate a color based on the username
-function getAvatarColor(username) {
-  const colors = [
-    "from-pink-500 to-rose-500", // Pink/Rose
-    "from-purple-500 to-indigo-500", // Purple/Indigo
-    "from-blue-500 to-cyan-500", // Blue/Cyan
-    "from-green-500 to-emerald-500", // Green/Emerald
-    "from-yellow-500 to-orange-500", // Yellow/Orange
-    "from-red-500 to-pink-500", // Red/Pink
-    "from-cyan-500 to-blue-500", // Cyan/Blue
-    "from-violet-500 to-purple-500", // Violet/Purple
-    "from-fuchsia-500 to-pink-500", // Fuchsia/Pink
-    "from-teal-500 to-cyan-500", // Teal/Cyan
-  ];
-
-  // Use username to generate consistent color for each user
-  let hash = 0;
-  for (let i = 0; i < username.length; i++) {
-    hash = username.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  return colors[Math.abs(hash) % colors.length];
-}
+import { getAvatarColor } from "@/utils/categories";
 
 async function followUser(formData) {
   "use server";
