@@ -40,11 +40,12 @@ export default function OnboardingPage() {
 
             <div>
               <label className="block text-white text-sm font-medium mb-2">
-                Bio
+                Bio *
               </label>
               <textarea
                 name="bio"
-                placeholder="Tell us about yourself"
+                placeholder="Tell us about yourself - what books do you like?"
+                required
                 className="w-full border border-white/20 bg-white/5 rounded-lg px-4 py-3 h-24 resize-none text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
               />
             </div>

@@ -102,6 +102,52 @@ export default async function UserPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <div className="max-w-2xl mx-auto p-6">
+        {/* Bio Prompt - Show if user has no bio */}
+        {!user[0].bio && (
+          <div className="bg-yellow-500/20 border border-yellow-500/50 rounded-xl p-4 mb-6">
+            <p className="text-yellow-200 font-medium mb-2">
+              ⚠️ Please add a bio to your profile!
+            </p>
+            <p className="text-gray-300 text-sm mb-3">
+              Tell other book lovers about yourself - what genres do you enjoy?
+              Favorite books?
+            </p>
+            <details className="group">
+              <summary className="cursor-pointer text-purple-400 hover:text-purple-300 text-sm font-medium">
+                Add your bio now
+              </summary>
+              <form action={handleUpdateProfile} className="mt-3 space-y-3">
+                <div>
+                  <label className="block text-white text-sm mb-1">
+                    Username
+                  </label>
+                  <input
+                    name="username"
+                    defaultValue={user[0].username}
+                    className="w-full border border-white/20 bg-white/5 rounded px-3 py-2 text-white text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-white text-sm mb-1">Bio *</label>
+                  <textarea
+                    name="bio"
+                    defaultValue=""
+                    placeholder="Tell us about yourself - what books do you like?"
+                    required
+                    className="w-full border border-white/20 bg-white/5 rounded px-3 py-2 text-white text-sm h-20 resize-none"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="bg-purple-600 text-white rounded py-2 text-sm hover:bg-purple-500 transition-colors"
+                >
+                  Save Profile
+                </button>
+              </form>
+            </details>
+          </div>
+        )}
+
         <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 mb-8">
           <div className="flex justify-between items-start mb-4">
             <div>
