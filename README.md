@@ -228,10 +228,7 @@ bookverse/
 
 ## Schema Visualizer
 
-```
 ![Schema Visualiser](public/schema-visualiser.png)
-
-```
 
 ---
 
