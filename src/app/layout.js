@@ -1,11 +1,18 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { Unna } from "next/font/google";
+import { Unna, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 const unna = Unna({
-  weight: "400",
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-unna",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
 });
 
 export const metadata = {
@@ -73,7 +80,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${unna.className} antialiased overflow-x-hidden`}>
+      <body
+        className={`${unna.variable} ${inter.variable} font-sans antialiased overflow-x-hidden`}
+      >
         <ClerkProvider>
           <Header />
           <main className="min-h-screen">{children}</main>
