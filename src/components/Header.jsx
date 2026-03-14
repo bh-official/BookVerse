@@ -15,6 +15,7 @@ export default function Header({ hideBooks = false }) {
   const shouldHideBooks = hideBooks || isBooksPage || pathname === "/";
   const shouldHidePosts = isPostsPage || pathname === "/";
   const shouldHideCategories = pathname === "/";
+  const shouldHideMyProfile = pathname === "/users/you";
 
   return (
     <header className="flex justify-between items-center px-8 py-8 h-24 bg-gradient-to-r from-indigo-900 via-purple-800 to-indigo-900 shadow-lg">
@@ -83,12 +84,14 @@ export default function Header({ hideBooks = false }) {
                 Categories
               </Link>
             )}
-            <Link
-              href="/users/you"
-              className="text-white hover:text-pink-300 transition-colors font-semibold"
-            >
-              My Profile
-            </Link>
+            {!shouldHideMyProfile && (
+              <Link
+                href="/users/you"
+                className="text-white hover:text-pink-300 transition-colors font-semibold"
+              >
+                My Profile
+              </Link>
+            )}
             <UserButton
               afterSignOutUrl="/"
               appearance={{
