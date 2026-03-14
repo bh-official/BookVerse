@@ -192,11 +192,11 @@ export default async function UserPage() {
           </div>
         )}
 
-        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 mb-8">
+        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 mb-8 relative z-50 overflow-visible">
           <div className="flex justify-between items-start mb-4">
             <div className="flex items-center gap-4">
               <div
-                className={`w-16 h-16 bg-gradient-to-r ${getAvatarColor(user[0].username || "")} rounded-full flex items-center justify-center text-white text-2xl font-bold shrink-0`}
+                className={`w-16 h-16 bg-linear-to-r ${getAvatarColor(user[0].username || "")} rounded-full flex items-center justify-center text-white text-2xl font-bold shrink-0`}
               >
                 {user[0].username ? user[0].username[0].toUpperCase() : "?"}
               </div>
@@ -207,14 +207,17 @@ export default async function UserPage() {
                 <p className="text-gray-400">{user[0].bio || "No bio yet"}</p>
               </div>
             </div>
-            <details className="relative">
-              <summary className="cursor-pointer text-gray-400 hover:text-white">
+            <details className="relative z-50">
+              <summary className="cursor-pointer text-gray-400 hover:text-white transition-colors p-2 rounded-full hover:bg-white/10 list-none">
                 ⋮
               </summary>
-              <div className="absolute right-0 mt-2 w-56 bg-slate-800 border border-white/10 rounded-lg shadow-lg p-4 z-10">
+              <div className="absolute right-0 top-full mt-2 w-64 bg-slate-800 border border-white/10 rounded-xl shadow-xl p-4 z-9999">
+                <h3 className="text-white text-sm font-semibold mb-3">
+                  Edit Profile
+                </h3>
                 <form action={handleUpdateProfile} className="space-y-3">
                   <div>
-                    <label className="block text-white text-sm mb-1">
+                    <label className="block text-white text-xs mb-1">
                       Username
                     </label>
                     <input
@@ -224,12 +227,12 @@ export default async function UserPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-white text-sm mb-1">Bio</label>
+                    <label className="block text-white text-xs mb-1">Bio</label>
                     <textarea
                       name="bio"
                       defaultValue={user[0].bio || ""}
                       placeholder="Tell us about yourself"
-                      className="w-full border border-white/20 bg-white/5 rounded px-3 py-2 text-white text-sm h-20 resize-none"
+                      className="w-full border border-white/20 bg-white/5 rounded px-3 py-2 text-white text-sm h-16 resize-none"
                     />
                   </div>
                   <button
@@ -261,7 +264,7 @@ export default async function UserPage() {
         </div>
 
         {/* Create Post Form */}
-        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 mb-8">
+        <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 mb-8 relative overflow-visible">
           <h2 className="text-xl font-semibold text-white mb-4">
             Create a Post
           </h2>
