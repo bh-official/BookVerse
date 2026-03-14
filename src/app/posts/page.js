@@ -1,11 +1,13 @@
 import { db } from "@/utils/db";
 import { getUser } from "@/utils/getUser";
 import Link from "next/link";
+import LikeButton from "@/components/LikeButton";
 
 export default async function PostsPage() {
   const user = await getUser();
+  const currentUserId = user ? user[0].id : null;
 
-  // Get all posts with user info
+  // Get all posts with user info and like counts
   const posts = (
     await db.query(
       `SELECT postss.*, user_account.username, user_account.clerk_id 
@@ -14,6 +16,32 @@ export default async function PostsPage() {
        ORDER BY postss.created_at DESC`,
     )
   ).rows;
+
+  // Get like counts for all posts
+  const postIds = posts.map((p) => p.id);
+  let likeCounts = {};
+  let userLikes = {};
+
+  if (postIds.length > 0) {
+    const likeCountsResult = await db.query(
+      `SELECT post_id, COUNT(*) as count FROM post_likes WHERE post_id = ANY($1) GROUP BY post_id`,
+      [postIds],
+    );
+    likeCountsResult.rows.forEach((row) => {
+      likeCounts[row.post_id] = parseInt(row.count);
+    });
+
+    // Check which posts the current user has liked
+    if (currentUserId) {
+      const userLikesResult = await db.query(
+        `SELECT post_id FROM post_likes WHERE user_id = $1 AND post_id = ANY($2)`,
+        [currentUserId, postIds],
+      );
+      userLikesResult.rows.forEach((row) => {
+        userLikes[row.post_id] = true;
+      });
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -43,7 +71,7 @@ export default async function PostsPage() {
                     </span>
                   </div>
                   <p className="text-white text-lg mb-4">{post.content}</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 mb-4">
                     {new Date(post.created_at).toLocaleString("en-US", {
                       year: "numeric",
                       month: "long",
@@ -54,6 +82,16 @@ export default async function PostsPage() {
                     })}
                   </p>
                 </Link>
+
+                {/* Like Button */}
+                <div className="flex items-center gap-4 pt-2 border-t border-white/10">
+                  <LikeButton
+                    postId={post.id}
+                    initialLiked={!!userLikes[post.id]}
+                    likeCount={likeCounts[post.id] || 0}
+                    isLoggedIn={!!currentUserId}
+                  />
+                </div>
               </div>
             ))}
           </div>

@@ -3,6 +3,7 @@ import { db } from "@/utils/db";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
+import LikeButton from "@/components/LikeButton";
 
 async function followUser(formData) {
   "use server";
@@ -115,6 +116,32 @@ export default async function UserPage({ params }) {
       [userId],
     )
   ).rows;
+
+  // Get like counts for posts
+  const postIds = posts.map((p) => p.id);
+  let likeCounts = {};
+  let userLikes = {};
+
+  if (postIds.length > 0) {
+    const likeCountsResult = await db.query(
+      `SELECT post_id, COUNT(*) as count FROM post_likes WHERE post_id = ANY($1) GROUP BY post_id`,
+      [postIds],
+    );
+    likeCountsResult.rows.forEach((row) => {
+      likeCounts[row.post_id] = parseInt(row.count);
+    });
+
+    // Check if current user has liked these posts
+    if (currentUser) {
+      const userLikesResult = await db.query(
+        `SELECT post_id FROM post_likes WHERE user_id = $1 AND post_id = ANY($2)`,
+        [currentUser[0].id, postIds],
+      );
+      userLikesResult.rows.forEach((row) => {
+        userLikes[row.post_id] = true;
+      });
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -230,6 +257,14 @@ export default async function UserPage({ params }) {
                       timeZoneName: "short",
                     })}
                   </p>
+                  <div className="flex items-center gap-4 mt-2">
+                    <LikeButton
+                      postId={post.id}
+                      initialLiked={!!userLikes[post.id]}
+                      likeCount={likeCounts[post.id] || 0}
+                      isLoggedIn={!!currentUser}
+                    />
+                  </div>
                 </div>
               ))}
             </div>

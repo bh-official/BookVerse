@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import DeleteButton from "@/components/DeleteButton";
+import LikeButton from "@/components/LikeButton";
 
 async function createPost(formData) {
   "use server";
@@ -48,6 +49,30 @@ export default async function UserPage() {
       [user[0].id],
     )
   ).rows;
+
+  // Get like counts for posts
+  const postIds = posts.map((p) => p.id);
+  let likeCounts = {};
+  let userLikes = {};
+
+  if (postIds.length > 0) {
+    const likeCountsResult = await db.query(
+      `SELECT post_id, COUNT(*) as count FROM post_likes WHERE post_id = ANY($1) GROUP BY post_id`,
+      [postIds],
+    );
+    likeCountsResult.rows.forEach((row) => {
+      likeCounts[row.post_id] = parseInt(row.count);
+    });
+
+    // Check if current user has liked their own posts
+    const userLikesResult = await db.query(
+      `SELECT post_id FROM post_likes WHERE user_id = $1 AND post_id = ANY($2)`,
+      [user[0].id, postIds],
+    );
+    userLikesResult.rows.forEach((row) => {
+      userLikes[row.post_id] = true;
+    });
+  }
 
   // Get follower and following counts
   const followerCount = (
@@ -203,6 +228,14 @@ export default async function UserPage() {
                       timeZoneName: "short",
                     })}
                   </p>
+                  <div className="flex items-center gap-4 mt-2">
+                    <LikeButton
+                      postId={post.id}
+                      initialLiked={!!userLikes[post.id]}
+                      likeCount={likeCounts[post.id] || 0}
+                      isLoggedIn={true}
+                    />
+                  </div>
                 </div>
               ))}
             </div>

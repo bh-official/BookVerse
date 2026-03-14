@@ -62,6 +62,16 @@ CREATE TABLE followers (
     UNIQUE(follower_id, following_id)
 );
 
+CREATE TABLE post_likes (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user_account(id),
+    FOREIGN KEY (post_id) REFERENCES postss(id),
+    UNIQUE(user_id, post_id)
+);
+
 -- ============================================
 -- SEED DATA
 -- ============================================
