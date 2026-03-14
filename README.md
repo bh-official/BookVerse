@@ -442,8 +442,6 @@ npm start
 | 12  | Ensure user's biography cannot be left blank - prompt if missing                         | ✅ Completed |
 | 13  | Create and display error page if user visits non-existent profile                        | ✅ Completed |
 
----
-
 ### Requirements Achieved
 
 ✅ User authentication with Clerk  
@@ -458,8 +456,6 @@ npm start
 ✅ Responsive design  
 ✅ Dark theme UI
 
----
-
 ### Challenges
 
 #### 1. Integrating Clerk Authentication with Custom Database
@@ -473,8 +469,6 @@ npm start
 - Implemented an onboarding flow that creates a database record when users first sign up
 - Used Clerk's `useUser()` hook to get the authenticated user and query our database
 
----
-
 #### 2. Handling Dynamic Routes with Next.js App Router
 
 **Challenge:** Next.js 16 App Router handles dynamic routes differently than the Pages Router. Parameters like `[id]` need to be handled as promises.
@@ -485,8 +479,6 @@ npm start
 - Created separate pages for different ID types (users, books, posts)
 - Implemented proper validation for route parameters to prevent 404 errors
 - Used Server Components to fetch data directly in the route handler
-
----
 
 #### 3. Managing Complex State for Likes and Follows
 
@@ -499,8 +491,6 @@ npm start
 - Implemented optimistic UI updates for immediate feedback
 - Added proper error handling for unauthorized users
 
----
-
 #### 4. Database Schema Design for Social Features
 
 **Challenge:** Designing a schema that supports followers, following, and post likes efficiently without data duplication.
@@ -511,8 +501,6 @@ npm start
 - Created a `post_likes` junction table linking users to posts with the same UNIQUE constraint
 - Used proper foreign key relationships to maintain data integrity
 - Added indexes on frequently queried columns for performance
-
----
 
 #### 5. Styling Consistency Across Components
 
@@ -526,8 +514,6 @@ npm start
 - Styled Clerk components with custom appearance settings
 - Used Framer Motion for consistent animations
 
----
-
 #### 6. Ensuring Bio is Not Blank
 
 **Challenge:** Required users to have a biography but needed to handle both new users and existing users without bios.
@@ -538,8 +524,6 @@ npm start
 - Added validation in the onboarding form to prevent empty bios
 - Added a check on profile access to redirect users without bios to complete their profile
 - Made the bio field required in the database (NOT NULL where appropriate)
-
----
 
 #### 7. Error Handling for Non-Existent Profiles
 
