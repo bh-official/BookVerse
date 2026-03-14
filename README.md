@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <strong>Your Book Review Community</strong>
+  <strong>Your Gateway to the Book Universe</strong>
 </p>
 
 <p align="center">
@@ -86,39 +86,73 @@
 
 ```
 bookverse/
-├── public/                    # Static assets
-│   └── BookVerse.png         # Logo
+├── public/                             # Static assets
+│   ├── BookVerse.png                   # Logo
 ├── src/
-│   ├── app/                  # Next.js App Router
-│   │   ├── api/              # API routes
-│   │   │   └── posts/[id]/like/  # Like API
-│   │   ├── books/            # Book pages
-│   │   │   ├── [id]/         # Individual book
-│   │   │   ├── new/          # Add book
-│   │   │   └── page.js      # Books listing
-│   │   ├── categories/       # Category pages
-│   │   ├── posts/            # Posts page
-│   │   ├── users/            # User pages
-│   │   │   ├── [id]/        # Other user profiles
-│   │   │   ├── you/         # Current user profile
-│   │   │   └── onboarding/   # Onboarding flow
-│   │   ├── sign-in/         # Clerk sign-in
-│   │   ├── sign-up/         # Clerk sign-up
-│   │   ├── layout.js        # Root layout
-│   │   └── page.js          # Landing page
-│   ├── components/           # React components
-│   │   ├── Header.jsx       # Navigation header
-│   │   ├── Footer.jsx       # Footer
-│   │   ├── Logo.jsx         # Logo component
-│   │   ├── EditButton.jsx   # Edit action button
-│   │   ├── DeleteButton.jsx # Delete action button
-│   │   ├── LikeButton.jsx   # Like button
-│   │   └── ...
-│   └── utils/                # Utility functions
-│       ├── db.js            # Database connection
-│       ├── getUser.js       # User helpers
-│       ├── categories.js    # Category utilities
-│       └── seed.js          # Database seeding
+│   ├── app/                            # Next.js App Router
+│   │   ├── api/                        # API routes
+│   │   │   └── posts/
+│   │   │       └── [id]/
+│   │   │           └── like/
+│   │   │               └── route.js
+│   │   ├── books/
+│   │   │   ├── page.js                 # Books listing
+│   │   │   ├── new/
+│   │   │   │   └── page.js             # Add new book
+│   │   │   └── [id]/
+│   │   │       ├── page.js             # Book detail
+│   │   │       ├── edit/
+│   │   │       │   └── page.js         # Edit book
+│   │   │       └── review/
+│   │   │           └── [reviewId]/
+│   │   │               └── edit/
+│   │   │                   └── page.js
+│   │   ├── categories/
+│   │   │   ├── page.js                 # Categories listing
+│   │   │   └── [category]/
+│   │   │       └── page.js             # Category detail
+│   │   ├── posts/
+│   │   │   └── page.js                 # Community posts
+│   │   ├── sign-in/
+│   │   │   └── [[...sign-in]]/
+│   │   │       └── page.jsx            # Sign in page
+│   │   ├── sign-up/
+│   │   │   └── [[...sign-up]]/
+│   │   │       └── page.jsx            # Sign up page
+│   │   ├── users/
+│   │   │   ├── [id]/
+│   │   │   │   └── page.js             # Other user profiles
+│   │   │   ├── onboarding/
+│   │   │   │   └── page.js             # User onboarding
+│   │   │   └── you/
+│   │   │       ├── page.js             # Current user profile
+│   │   │       └── post/
+│   │   │           └── [postId]/
+│   │   │               └── edit/
+│   │   │                   └── page.js
+│   │   ├── error.js                    # Error boundary
+│   │   ├── globals.css                 # Global styles
+│   │   ├── layout.js                   # Root layout
+│   │   ├── not-found.js                # 404 page
+│   │   └── page.js                     # Landing page
+│   ├── components/
+│   │   ├── ActionButtons.jsx           # Action button wrapper
+│   │   ├── DeleteButton.jsx            # Delete button
+│   │   ├── EditButton.jsx              # Edit button
+│   │   ├── Footer.jsx                  # Footer component
+│   │   ├── Header.jsx                  # Navigation header
+│   │   ├── InvalidLink.jsx             # Invalid link component
+│   │   ├── LikeButton.jsx              # Like button
+│   │   ├── Logo.jsx                    # Logo component
+│   │   └── NotFound.jsx                # Not found component
+│   └── utils/
+│       ├── categories.js               # Category utilities
+│       ├── db.js                       # Database connection
+│       ├── getUser.js                  # User helpers
+├── .gitignore                          # Git ignore
+├── .env                                # Environmental variables
+├── README.md                           # This file
+└── SQL.SQL                             # Database schema
 ```
 
 ---
@@ -131,7 +165,7 @@ bookverse/
 | **Language**       | JavaScript/React 19            |
 | **Styling**        | Tailwind CSS 4                 |
 | **Authentication** | Clerk                          |
-| **Database**       | PostgreSQL (Neon)              |
+| **Database**       | PostgreSQL                     |
 | **ORM/Query**      | PostgreSQL node module (pg)    |
 | **UI Components**  | Radix UI (AlertDialog, Dialog) |
 | **Animations**     | Framer Motion                  |
@@ -195,47 +229,8 @@ bookverse/
 ## Schema Visualizer
 
 ```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  user_account  │     │     books       │     │     posts       │
-├─────────────────┤     ├─────────────────┤     ├─────────────────┤
-│ id (PK)        │     │ id (PK)         │     │ id (PK)         │
-│ username       │◄──┐  │ user_id (FK)   │     │ user_id (FK)   │
-│ bio            │  │  │ title          │     │ content         │
-│ clerk_id       │  │  │ author         │     │ created_at      │
-└─────────────────┘  │  │ description    │     └────────┬────────┘
-                     │  │ quote          │              │
-                     │  │ released       │              │
-                     │  │ img_url        │              │
-                     │  │ category       │              │
-                     │  └────────┬──────┘              │
-                     │           │                     │
-                     │           ▼                     │
-                     │  ┌─────────────────┐            │
-                     │  │     review      │            │
-                     │  ├─────────────────┤            │
-                     │  │ id (PK)         │            │
-                     │  │ user_id (FK)    │            │
-                     │  │ book_id (FK)    │            │
-                     │  │ content         │            │
-                     │  └─────────────────┘            │
-                     │                                 │
-                     │     ┌─────────────────┐         │
-                     │     │    followers    │         │
-                     │     ├─────────────────┤         │
-                     └────►│ id (PK)         │◄────────┘
-                           │ follower_id (FK) │
-                           │ following_id(FK)│
-                           │ created_at      │
-                           └─────────────────┘
+![Schema Visualiser](public/schema-visualiser.png)
 
-                           ┌─────────────────┐
-                           │   post_likes    │
-                           ├─────────────────┤
-                           │ id (PK)         │
-                           │ user_id (FK)    │
-                           │ post_id (FK)    │
-                           │ created_at      │
-                           └─────────────────┘
 ```
 
 ---
@@ -253,12 +248,53 @@ bookverse/
 
 ## API Endpoints
 
-### Like Posts
+BookVerse uses Next.js App Router with Server Actions and form submissions. Here's a comprehensive list of all data operations:
 
-- **POST** `/api/posts/[id]/like`
-  - Toggles like on a post
-  - Requires authentication
-  - Returns updated like count
+### Server Actions & Form Functions
+
+| Action           | File                                                | Function               |
+| ---------------- | --------------------------------------------------- | ---------------------- |
+| Like/Unlike Post | `src/app/api/posts/[id]/like/route.js`              | `POST` handler         |
+| Create Book      | `src/app/books/new/page.js`                         | Form action            |
+| Update Book      | `src/app/books/[id]/edit/page.js`                   | Form action            |
+| Delete Book      | `src/app/books/[id]/page.js`                        | DeleteButton component |
+| Create Review    | `src/app/books/[id]/page.js`                        | Form action            |
+| Update Review    | `src/app/books/[id]/review/[reviewId]/edit/page.js` | Form action            |
+| Create Post      | `src/app/users/you/page.js`                         | Form action            |
+| Update Post      | `src/app/users/you/post/[postId]/edit/page.js`      | Form action            |
+| Delete Post      | `src/app/users/you/page.js`                         | DeleteButton component |
+| Update Profile   | `src/app/users/onboarding/page.js`                  | Form action            |
+| Follow User      | `src/app/users/[id]/page.js`                        | Server action          |
+| Unfollow User    | `src/app/users/[id]/page.js`                        | Server action          |
+
+---
+
+### Data Access Patterns
+
+Since BookVerse uses Next.js App Router, most data operations are performed directly in Server Components:
+
+#### Server Actions (Form Submissions)
+
+The application uses form actions for:
+
+- Creating new books (`/books/new/page.js`)
+- Adding reviews (`/books/[id]/page.js`)
+- Creating posts (`/users/you/page.js`)
+- Updating profiles (`/users/onboarding/page.js`)
+- Editing reviews (`/books/[id]/review/[reviewId]/edit/page.js`)
+
+---
+
+### Error Responses
+
+All API routes return consistent error responses:
+
+| Status Code | Description                            |
+| ----------- | -------------------------------------- |
+| 400         | Bad Request - Invalid parameters       |
+| 401         | Unauthorized - Not logged in           |
+| 404         | Not Found - Resource doesn't exist     |
+| 500         | Internal Server Error - Server failure |
 
 ---
 
@@ -321,8 +357,6 @@ bookverse/
 
 ## Major Changes & Polish
 
-### Recent Updates
-
 1. **Font Improvements**
    - Added Inter font for body text
    - Added Unna serif font for headings
@@ -356,15 +390,15 @@ bookverse/
 ### Prerequisites
 
 - Node.js 18+
-- npm or yarn
-- PostgreSQL database (Neon)
+- npm
+- PostgreSQL database
 - Clerk account
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/bookverse.git
+git clone https://github.com/bh-official/BookVerse.git
 cd bookverse
 
 # Install dependencies
@@ -393,6 +427,24 @@ npm start
 
 ## Reflection
 
+### Requirements
+
+| #   | Requirement                                                                              | Status       |
+| --- | ---------------------------------------------------------------------------------------- | ------------ |
+| 1   | Set up user sign-up and user login using Clerk                                           | ✅ Completed |
+| 2   | Create and display an error/not found page if the user visits a page that doesn't exist  | ✅ Completed |
+| 3   | Use 1 or more Radix UI Primitive component (e.g., AlertDialog)                           | ✅ Completed |
+| 4   | Enable users to create a user profile with biography using a form, stored in database    | ✅ Completed |
+| 5   | Enable users to create posts associated with their Clerk userId                          | ✅ Completed |
+| 6   | Display posts on the user's profile page                                                 | ✅ Completed |
+| 7   | Allow users to update their content via dynamic route (/users/you/post/[postId]/edit)    | ✅ Completed |
+| 8   | Allow users to delete their content                                                      | ✅ Completed |
+| 9   | Allow users to view other profiles directly from posts using dynamic route (/users/[id]) | ✅ Completed |
+| 10  | Let users follow each other (follower/followee relationship)                             | ✅ Completed |
+| 11  | Enable users to like posts (user_id linked to liked_post in junction table)              | ✅ Completed |
+| 12  | Ensure user's biography cannot be left blank - prompt if missing                         | ✅ Completed |
+| 13  | Create and display error page if user visits non-existent profile                        | ✅ Completed |
+
 ### Requirements Achieved
 
 ✅ User authentication with Clerk  
@@ -409,11 +461,95 @@ npm start
 
 ### Challenges
 
-- Integrating Clerk authentication with custom database
-- Handling dynamic routes with Next.js App Router
-- Managing complex state for likes and follows
-- Database schema design for social features
-- Styling consistency across components
+#### 1. Integrating Clerk Authentication with Custom Database
+
+**Challenge:** Clerk handles authentication externally, but we needed to link Clerk users to our local PostgreSQL database to store profiles, posts, and social connections.
+
+**Solution:**
+
+- Created a `user_account` table with a `clerk_id` field to link Clerk users
+- Built a `getUser()` utility function that maps Clerk's `userId` to local database user
+- Implemented an onboarding flow that creates a database record when users first sign up
+- Used Clerk's `useUser()` hook to get the authenticated user and query our database
+
+---
+
+#### 2. Handling Dynamic Routes with Next.js App Router
+
+**Challenge:** Next.js 16 App Router handles dynamic routes differently than the Pages Router. Parameters like `[id]` need to be handled as promises.
+
+**Solution:**
+
+- Learned to use `await params` to access dynamic route parameters in Next.js 16
+- Created separate pages for different ID types (users, books, posts)
+- Implemented proper validation for route parameters to prevent 404 errors
+- Used Server Components to fetch data directly in the route handler
+
+---
+
+#### 3. Managing Complex State for Likes and Follows
+
+**Challenge:** Social features require real-time state management between client and server. The like button needed to toggle and update the count without a page reload.
+
+**Solution:**
+
+- Created a client-side `LikeButton` component that calls a Server API route
+- Used the `/api/posts/[id]/like` endpoint to handle the toggle logic
+- Implemented optimistic UI updates for immediate feedback
+- Added proper error handling for unauthorized users
+
+---
+
+#### 4. Database Schema Design for Social Features
+
+**Challenge:** Designing a schema that supports followers, following, and post likes efficiently without data duplication.
+
+**Solution:**
+
+- Created a `followers` table with `follower_id` and `following_id` with a UNIQUE constraint to prevent duplicate follows
+- Created a `post_likes` junction table linking users to posts with the same UNIQUE constraint
+- Used proper foreign key relationships to maintain data integrity
+- Added indexes on frequently queried columns for performance
+
+---
+
+#### 5. Styling Consistency Across Components
+
+**Challenge:** Maintaining consistent purple/pink dark theme across many different components and pages.
+
+**Solution:**
+
+- Created centralized color variables in `globals.css`
+- Built reusable components (EditButton, DeleteButton, LikeButton) with consistent styling
+- Applied uniform Tailwind classes for buttons, cards, and typography
+- Styled Clerk components with custom appearance settings
+- Used Framer Motion for consistent animations
+
+---
+
+#### 6. Ensuring Bio is Not Blank
+
+**Challenge:** Required users to have a biography but needed to handle both new users and existing users without bios.
+
+**Solution:**
+
+- Created an onboarding page that forces bio input before accessing the full app
+- Added validation in the onboarding form to prevent empty bios
+- Added a check on profile access to redirect users without bios to complete their profile
+- Made the bio field required in the database (NOT NULL where appropriate)
+
+---
+
+#### 7. Error Handling for Non-Existent Profiles
+
+**Challenge:** Users might try to access profiles that don't exist via the `/users/[id]` route.
+
+**Solution:**
+
+- Added database queries to check if a user exists before rendering the profile
+- Created a reusable `InvalidLink` component for consistent error messaging
+- Implemented proper 404 handling with user-friendly messages
+- Added validation to check if the user ID is valid before querying
 
 ### What Went Well
 
@@ -462,8 +598,4 @@ BookVerse is a comprehensive book review community platform that demonstrates fu
 
 <p align="center">
   Made with ❤️ for book lovers everywhere
-</p>
-
-<p align="center">
-  © 2026 BookVerse. All rights reserved.
 </p>
