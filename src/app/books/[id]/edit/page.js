@@ -148,16 +148,16 @@ export default async function EditBookPage({ params }) {
               <select
                 name="category"
                 defaultValue={book.category || ""}
-                className="w-full border border-white/20 bg-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
+                className="w-full border border-white/20 bg-white/5 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
               >
-                <option value="" className="text-gray-400 bg-slate-800">
+                <option value="" className="bg-slate-800 text-gray-400">
                   Select a category
                 </option>
                 {BOOK_CATEGORIES.map((cat) => (
                   <option
                     key={cat}
                     value={cat}
-                    className="text-white bg-slate-800"
+                    className="bg-slate-800 text-white"
                   >
                     {cat}
                   </option>
