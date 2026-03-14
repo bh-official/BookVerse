@@ -9,6 +9,7 @@ const unna = Unna({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://book-verse-blond.vercel.app"),
   title: "BookVerse - Your Book Review Community",
   description:
     "Discover, review, and share books with the BookVerse community. Write reviews, create posts, and connect with fellow book lovers.",

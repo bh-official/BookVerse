@@ -85,9 +85,8 @@ export default function LandingPage() {
             transition={{ delay: 0.4 }}
             className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto"
           >
-            BookVerse is a full-stack book review application where you can
-            explore books, share your reviews, create posts, and connect with
-            fellow book lovers.
+            BookVerse is a book review community where you can explore books,
+            share reviews, create posts, and connect with fellow book lovers.
           </motion.p>
 
           <motion.div
@@ -102,21 +101,18 @@ export default function LandingPage() {
             >
               Explore Books 🚀
             </Link>
-            {!isSignedIn ? (
-              <Link
-                href="/posts"
-                className="px-8 py-4 border-2 border-white/30 text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all"
-              >
-                Explore Posts 📝
-              </Link>
-            ) : (
-              <Link
-                href="/posts"
-                className="px-8 py-4 border-2 border-white/30 text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all"
-              >
-                Explore Posts 📝
-              </Link>
-            )}
+            <Link
+              href="/categories"
+              className="px-8 py-4 border-2 border-white/30 text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all"
+            >
+              Browse Categories 🏷️
+            </Link>
+            <Link
+              href="/posts"
+              className="px-8 py-4 border-2 border-white/30 text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all"
+            >
+              Explore Posts 📝
+            </Link>
           </motion.div>
         </motion.div>
       </section>
@@ -138,7 +134,7 @@ export default function LandingPage() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, i) => (
               <motion.div
                 key={i}
