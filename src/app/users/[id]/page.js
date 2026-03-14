@@ -47,7 +47,47 @@ async function unfollowUser(formData) {
 
 export default async function UserPage({ params }) {
   const { id } = await params;
+
+  // Validate that id is a number
   const userId = parseInt(id);
+  if (isNaN(userId)) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-6">
+          <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 mb-6">
+            <div className="text-6xl mb-4">🔍</div>
+            <h1 className="text-3xl font-bold text-white mb-4">
+              Invalid Profile Link
+            </h1>
+            <p className="text-gray-400 mb-6">
+              The profile link you're trying to access appears to be invalid.
+              Please check the URL and try again.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link
+                href="/posts"
+                className="px-6 py-3 bg-purple-600 text-white rounded-full font-semibold hover:bg-purple-500 transition-colors"
+              >
+                Browse Posts
+              </Link>
+              <Link
+                href="/books"
+                className="px-6 py-3 border-2 border-white/20 text-white rounded-full font-semibold hover:bg-white/10 transition-colors"
+              >
+                Explore Books
+              </Link>
+            </div>
+          </div>
+          <Link
+            href="/posts"
+            className="text-purple-400 hover:text-purple-300 text-sm"
+          >
+            ← Go back to Posts
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   // Fetch the user by ID from the database
   const userResult = await db.query(
@@ -59,10 +99,42 @@ export default async function UserPage({ params }) {
   if (user.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">User Not Found</h1>
-          <Link href="/posts" className="text-purple-400 hover:text-purple-300">
-            ← Back to Posts
+        <div className="text-center max-w-md mx-auto p-6">
+          <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 mb-6">
+            <div className="text-6xl mb-4">👤</div>
+            <h1 className="text-3xl font-bold text-white mb-4">
+              User Not Found
+            </h1>
+            <p className="text-gray-400 mb-6">
+              Sorry, we couldn't find the user you're looking for. The profile
+              may have been deleted or the URL might be incorrect.
+            </p>
+            <div className="bg-yellow-500/20 border border-yellow-500/50 rounded-lg p-4 mb-6">
+              <p className="text-yellow-200 text-sm">
+                Looking for someone specific? Try browsing the posts page to
+                find other book lovers!
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link
+                href="/posts"
+                className="px-6 py-3 bg-purple-600 text-white rounded-full font-semibold hover:bg-purple-500 transition-colors"
+              >
+                Browse Posts
+              </Link>
+              <Link
+                href="/books"
+                className="px-6 py-3 border-2 border-white/20 text-white rounded-full font-semibold hover:bg-white/10 transition-colors"
+              >
+                Explore Books
+              </Link>
+            </div>
+          </div>
+          <Link
+            href="/posts"
+            className="text-purple-400 hover:text-purple-300 text-sm"
+          >
+            ← Go back to Posts
           </Link>
         </div>
       </div>

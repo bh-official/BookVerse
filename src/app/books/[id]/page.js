@@ -12,12 +12,70 @@ export default async function SingleBookPage({ params }) {
     .rows[0];
 
   if (!book) {
+    const bookId = parseInt(id);
+    if (isNaN(bookId)) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+          <div className="text-center max-w-md mx-auto p-6">
+            <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 mb-6">
+              <div className="text-6xl mb-4">🔍</div>
+              <h1 className="text-3xl font-bold text-white mb-4">
+                Invalid Book Link
+              </h1>
+              <p className="text-gray-400 mb-6">
+                The book link you're trying to access appears to be invalid.
+                Please check the URL and try again.
+              </p>
+              <Link
+                href="/books"
+                className="px-6 py-3 bg-purple-600 text-white rounded-full font-semibold hover:bg-purple-500 transition-colors"
+              >
+                Browse Books
+              </Link>
+            </div>
+            <Link
+              href="/books"
+              className="text-purple-400 hover:text-purple-300 text-sm"
+            >
+              ← Go back to Books
+            </Link>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-white text-xl mb-4">Book not found</p>
-          <Link href="/books" className="text-purple-400 hover:text-purple-300">
-            ← Back to Books
+        <div className="text-center max-w-md mx-auto p-6">
+          <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 mb-6">
+            <div className="text-6xl mb-4">📚</div>
+            <h1 className="text-3xl font-bold text-white mb-4">
+              Book Not Found
+            </h1>
+            <p className="text-gray-400 mb-6">
+              Sorry, we couldn't find the book you're looking for. It may have
+              been removed from our collection.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link
+                href="/books"
+                className="px-6 py-3 bg-purple-600 text-white rounded-full font-semibold hover:bg-purple-500 transition-colors"
+              >
+                Browse Books
+              </Link>
+              <Link
+                href="/books/new"
+                className="px-6 py-3 border-2 border-white/20 text-white rounded-full font-semibold hover:bg-white/10 transition-colors"
+              >
+                Add a Book
+              </Link>
+            </div>
+          </div>
+          <Link
+            href="/books"
+            className="text-purple-400 hover:text-purple-300 text-sm"
+          >
+            ← Go back to Books
           </Link>
         </div>
       </div>
