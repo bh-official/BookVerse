@@ -100,7 +100,7 @@ export default async function CategoriesPage() {
             {activeCategories.map((category) => (
               <Link
                 key={category.name}
-                href={`/books?category=${encodeURIComponent(category.name)}`}
+                href={`/categories/${encodeURIComponent(category.name)}`}
                 className="group"
               >
                 <div className="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 hover:border-purple-500/50 transition-all">

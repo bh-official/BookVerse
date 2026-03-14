@@ -141,9 +141,12 @@ export default async function SingleBookPage({ params }) {
                   </h1>
                   <p className="text-gray-400 mt-1">by {book.author}</p>
                   {book.category && (
-                    <span className="inline-block mt-2 px-3 py-1 text-xs font-medium bg-purple-600/30 text-purple-300 rounded-full">
+                    <Link
+                      href={`/categories/${encodeURIComponent(book.category)}`}
+                      className="inline-block mt-2 px-3 py-1 text-xs font-medium bg-purple-600/30 text-purple-300 rounded-full hover:bg-purple-600/50 transition-colors"
+                    >
                       {book.category}
-                    </span>
+                    </Link>
                   )}
                   {book.released && (
                     <p className="text-sm text-gray-500 mt-1">
