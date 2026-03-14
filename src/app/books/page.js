@@ -27,7 +27,8 @@ const BOOK_CATEGORIES = [
 
 export default async function BooksPage({ searchParams }) {
   const user = await getUser();
-  const category = searchParams?.category;
+  const params = await searchParams;
+  const category = params?.category;
 
   const books = category
     ? (await db.query(`SELECT * FROM books WHERE category = $1`, [category]))
