@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import DeleteButton from "@/components/DeleteButton";
+import EditButton from "@/components/EditButton";
 import LikeButton from "@/components/LikeButton";
 import { getAvatarColor } from "@/utils/categories";
 
@@ -290,12 +291,10 @@ export default async function UserPage() {
                   <div className="flex justify-between items-start">
                     <p className="text-white">{post.content}</p>
                     <div className="flex gap-2 ml-4">
-                      <Link
+                      <EditButton
                         href={`/users/you/post/${post.id}/edit`}
-                        className="text-sm text-purple-400 hover:text-purple-300"
-                      >
-                        Edit
-                      </Link>
+                        label="Edit"
+                      />
                       <DeleteButton
                         action={async () => {
                           "use server";

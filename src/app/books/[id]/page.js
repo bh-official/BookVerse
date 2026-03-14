@@ -3,6 +3,7 @@ import { getUser } from "@/utils/getUser";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import DeleteButton from "@/components/DeleteButton";
+import EditButton from "@/components/EditButton";
 
 export default async function SingleBookPage({ params }) {
   const user = await getUser();
@@ -156,12 +157,7 @@ export default async function SingleBookPage({ params }) {
                 </div>
                 {book.user_id && user && book.user_id === user[0].id && (
                   <div className="flex gap-2">
-                    <Link
-                      href={`/books/${id}/edit`}
-                      className="px-3 py-1 text-sm border border-white/20 text-white rounded hover:bg-white/10 transition-colors"
-                    >
-                      Edit
-                    </Link>
+                    <EditButton href={`/books/${id}/edit`} label="Edit" />
                     <DeleteButton
                       action={async () => {
                         "use server";
@@ -214,12 +210,10 @@ export default async function SingleBookPage({ params }) {
                       user &&
                       review.user_id === user[0].id && (
                         <div className="flex gap-2">
-                          <Link
+                          <EditButton
                             href={`/books/${id}/review/${review.id}/edit`}
-                            className="text-sm text-purple-400 hover:text-purple-300"
-                          >
-                            Edit
-                          </Link>
+                            label="Edit"
+                          />
                           <DeleteButton
                             action={async () => {
                               "use server";

@@ -7,8 +7,27 @@ export default async function EditPostPage({ params }) {
   const user = await getUser();
   const { postId } = await params;
 
-  const post = (await db.query(`SELECT * FROM postss WHERE id = $1`, [postId]))
-    .rows[0];
+  // Validate that id is a number BEFORE querying the database
+  const parsedPostId = parseInt(postId);
+  if (isNaN(parsedPostId)) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-white text-xl mb-4">Invalid Post Link</p>
+          <Link
+            href="/users/you"
+            className="text-purple-400 hover:text-purple-300"
+          >
+            ← Back to Profile
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const post = (
+    await db.query(`SELECT * FROM postss WHERE id = $1`, [parsedPostId])
+  ).rows[0];
 
   if (!post) {
     return (
