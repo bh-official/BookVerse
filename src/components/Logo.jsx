@@ -5,9 +5,9 @@ import Image from "next/image";
 
 export default function Logo({ size = "md" }) {
   const sizes = {
-    sm: { width: 32, height: 32 },
-    md: { width: 48, height: 48 },
-    lg: { width: 64, height: 64 },
+    sm: { width: 40, height: 40 },
+    md: { width: 56, height: 56 },
+    lg: { width: 72, height: 72 },
   };
 
   const { width, height } = sizes[size];
@@ -48,7 +48,14 @@ export default function Logo({ size = "md" }) {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        BookVerse
+        <div className="flex flex-col">
+          <span>BookVerse</span>
+          <span
+            className={`${size === "sm" ? "text-xs" : size === "md" ? "text-sm" : "text-base"} font-normal text-purple-300 normal-case"`}
+          >
+            Your Gateway to the Book Universe
+          </span>
+        </div>
       </motion.span>
     </motion.div>
   );
