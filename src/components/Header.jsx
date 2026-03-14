@@ -12,7 +12,8 @@ export default function Header({ hideBooks = false }) {
   // Hide Books and Posts on landing page, books pages, and posts pages
   const isBooksPage = pathname === "/books" || pathname.startsWith("/books/");
   const isPostsPage = pathname === "/posts" || pathname.startsWith("/posts/");
-  const shouldHideBooks = hideBooks || isBooksPage || pathname === "/";
+  const shouldHideBooks =
+    hideBooks || isBooksPage || pathname === "/" || pathname === "/categories";
   const shouldHidePosts = isPostsPage || pathname === "/";
   const shouldHideCategories = pathname === "/" || pathname === "/categories";
   const shouldHideMyProfile = pathname === "/users/you";
