@@ -125,29 +125,3 @@ export default async function CategoriesPage() {
     </div>
   );
 }
-
-function getCategoryEmoji(category) {
-  const emojiMap = {
-    Fiction: "📖",
-    "Non-Fiction": "📚",
-    Horror: "👻",
-    Fantasy: "🧙",
-    Comedy: "😂",
-    Jokes: "🤣",
-    Funny: "😄",
-    Children: "👶",
-    Romance: "💕",
-    Mystery: "🔍",
-    Thriller: "😱",
-    "Science Fiction": "🚀",
-    Biography: "👤",
-    History: "🏛️",
-    "Self-Help": "💡",
-    Poetry: "📝",
-    Drama: "🎭",
-    Adventure: "⚔️",
-    Crime: "🔪",
-    Dystopian: "🌆",
-  };
-  return emojiMap[category] || "📕";
-}
