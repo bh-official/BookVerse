@@ -5,9 +5,9 @@ import Image from "next/image";
 
 export default function Logo({ size = "md" }) {
   const sizes = {
-    sm: { width: 40, height: 40 },
-    md: { width: 56, height: 56 },
-    lg: { width: 72, height: 72 },
+    sm: { width: 40, height: 80 },
+    md: { width: 45, height: 90 },
+    lg: { width: 60, height: 120 },
   };
 
   const { width, height } = sizes[size];
