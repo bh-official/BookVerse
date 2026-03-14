@@ -8,42 +8,43 @@ export default async function SingleBookPage({ params }) {
   const user = await getUser();
   const { id } = await params;
 
-  const book = (await db.query(`SELECT * FROM books WHERE id = $1`, [id]))
+  // Validate that id is a number BEFORE querying the database
+  const bookId = parseInt(id);
+  if (isNaN(bookId)) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-6">
+          <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 mb-6">
+            <div className="text-6xl mb-4">🔍</div>
+            <h1 className="text-3xl font-bold text-white mb-4">
+              Invalid Book Link
+            </h1>
+            <p className="text-gray-400 mb-6">
+              The book link you're trying to access appears to be invalid.
+              Please check the URL and try again.
+            </p>
+            <Link
+              href="/books"
+              className="px-6 py-3 bg-purple-600 text-white rounded-full font-semibold hover:bg-purple-500 transition-colors"
+            >
+              Browse Books
+            </Link>
+          </div>
+          <Link
+            href="/books"
+            className="text-purple-400 hover:text-purple-300 text-sm"
+          >
+            ← Go back to Books
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const book = (await db.query(`SELECT * FROM books WHERE id = $1`, [bookId]))
     .rows[0];
 
   if (!book) {
-    const bookId = parseInt(id);
-    if (isNaN(bookId)) {
-      return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-          <div className="text-center max-w-md mx-auto p-6">
-            <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 mb-6">
-              <div className="text-6xl mb-4">🔍</div>
-              <h1 className="text-3xl font-bold text-white mb-4">
-                Invalid Book Link
-              </h1>
-              <p className="text-gray-400 mb-6">
-                The book link you're trying to access appears to be invalid.
-                Please check the URL and try again.
-              </p>
-              <Link
-                href="/books"
-                className="px-6 py-3 bg-purple-600 text-white rounded-full font-semibold hover:bg-purple-500 transition-colors"
-              >
-                Browse Books
-              </Link>
-            </div>
-            <Link
-              href="/books"
-              className="text-purple-400 hover:text-purple-300 text-sm"
-            >
-              ← Go back to Books
-            </Link>
-          </div>
-        </div>
-      );
-    }
-
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
         <div className="text-center max-w-md mx-auto p-6">
@@ -90,7 +91,7 @@ export default async function SingleBookPage({ params }) {
         JOIN user_account 
         ON review.user_id = user_account.id 
         WHERE review.book_id= $1;`,
-      [id],
+      [bookId],
     )
   ).rows;
 
@@ -108,7 +109,7 @@ export default async function SingleBookPage({ params }) {
     const user = await getUser();
     await db.query(
       `insert into review (user_id, book_id, content) values ($1, $2, $3)`,
-      [user[0].id, id, trimmedContent],
+      [user[0].id, bookId, trimmedContent],
     );
     redirect(`/books/${id}`);
   }
@@ -156,7 +157,9 @@ export default async function SingleBookPage({ params }) {
                     <DeleteButton
                       action={async () => {
                         "use server";
-                        await db.query(`DELETE FROM books WHERE id = $1`, [id]);
+                        await db.query(`DELETE FROM books WHERE id = $1`, [
+                          bookId,
+                        ]);
                         redirect(`/books`);
                       }}
                     />

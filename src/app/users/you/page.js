@@ -7,6 +7,29 @@ import { redirect } from "next/navigation";
 import DeleteButton from "@/components/DeleteButton";
 import LikeButton from "@/components/LikeButton";
 
+// Generate a color based on the username
+function getAvatarColor(username) {
+  const colors = [
+    "from-pink-500 to-rose-500",
+    "from-purple-500 to-indigo-500",
+    "from-blue-500 to-cyan-500",
+    "from-green-500 to-emerald-500",
+    "from-yellow-500 to-orange-500",
+    "from-red-500 to-pink-500",
+    "from-cyan-500 to-blue-500",
+    "from-violet-500 to-purple-500",
+    "from-fuchsia-500 to-pink-500",
+    "from-teal-500 to-cyan-500",
+  ];
+
+  let hash = 0;
+  for (let i = 0; i < username.length; i++) {
+    hash = username.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  return colors[Math.abs(hash) % colors.length];
+}
+
 async function createPost(formData) {
   "use server";
   const { userId } = await auth();
@@ -171,11 +194,18 @@ export default async function UserPage() {
 
         <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 mb-8">
           <div className="flex justify-between items-start mb-4">
-            <div>
-              <h1 className="text-3xl font-bold text-white mb-2">
-                {user[0].username}
-              </h1>
-              <p className="text-gray-400">{user[0].bio || "No bio yet"}</p>
+            <div className="flex items-center gap-4">
+              <div
+                className={`w-16 h-16 bg-gradient-to-r ${getAvatarColor(user[0].username || "")} rounded-full flex items-center justify-center text-white text-2xl font-bold shrink-0`}
+              >
+                {user[0].username ? user[0].username[0].toUpperCase() : "?"}
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-white mb-2">
+                  {user[0].username}
+                </h1>
+                <p className="text-gray-400">{user[0].bio || "No bio yet"}</p>
+              </div>
             </div>
             <details className="relative">
               <summary className="cursor-pointer text-gray-400 hover:text-white">
