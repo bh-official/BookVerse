@@ -3,12 +3,35 @@ import { getUser } from "@/utils/getUser";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
+const BOOK_CATEGORIES = [
+  "Fiction",
+  "Non-Fiction",
+  "Horror",
+  "Fantasy",
+  "Comedy",
+  "Jokes",
+  "Funny",
+  "Children",
+  "Romance",
+  "Mystery",
+  "Thriller",
+  "Science Fiction",
+  "Biography",
+  "History",
+  "Self-Help",
+  "Poetry",
+  "Drama",
+  "Adventure",
+  "Crime",
+  "Dystopian",
+];
+
 export default async function NewBookPage() {
   const user = await getUser();
 
   async function handleAddBook(formData) {
     "use server";
-    const { title, author, description, quote, released, img_url } =
+    const { title, author, description, quote, released, img_url, category } =
       Object.fromEntries(formData);
 
     // Validate - trim whitespace and check if empty
@@ -25,7 +48,7 @@ export default async function NewBookPage() {
 
     const user = await getUser();
     const result = await db.query(
-      `INSERT INTO books (user_id, title, author, description, quote, released, img_url) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
+      `INSERT INTO books (user_id, title, author, description, quote, released, img_url, category) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
       [
         user[0].id,
         trimmedTitle,
@@ -34,6 +57,7 @@ export default async function NewBookPage() {
         quote?.trim() || null,
         released || null,
         img_url?.trim() || null,
+        category || null,
       ],
     );
     redirect(`/books/${result.rows[0].id}`);
@@ -70,6 +94,26 @@ export default async function NewBookPage() {
                 required
                 className="w-full border border-white/20 bg-white/5 rounded-lg p-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
               />
+            </div>
+            <div>
+              <label className="block text-white mb-2">Category</label>
+              <select
+                name="category"
+                className="w-full border border-white/20 bg-slate-800 rounded-lg p-3 text-white focus:outline-none focus:border-purple-500"
+              >
+                <option value="" className="text-gray-400 bg-slate-800">
+                  Select a category
+                </option>
+                {BOOK_CATEGORIES.map((cat) => (
+                  <option
+                    key={cat}
+                    value={cat}
+                    className="text-white bg-slate-800"
+                  >
+                    {cat}
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block text-white mb-2">Description</label>

@@ -140,6 +140,11 @@ export default async function SingleBookPage({ params }) {
                     {book.title}
                   </h1>
                   <p className="text-gray-400 mt-1">by {book.author}</p>
+                  {book.category && (
+                    <span className="inline-block mt-2 px-3 py-1 text-xs font-medium bg-purple-600/30 text-purple-300 rounded-full">
+                      {book.category}
+                    </span>
+                  )}
                   {book.released && (
                     <p className="text-sm text-gray-500 mt-1">
                       {new Date(book.released).toLocaleDateString()}

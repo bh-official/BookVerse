@@ -53,6 +53,11 @@ export default async function BooksPage() {
                   <p className="text-sm text-gray-400 truncate">
                     {book.author}
                   </p>
+                  {book.category && (
+                    <span className="inline-block mt-1 px-2 py-0.5 text-xs bg-purple-600/30 text-purple-300 rounded">
+                      {book.category}
+                    </span>
+                  )}
                 </Link>
               </li>
             ))}

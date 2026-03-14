@@ -3,6 +3,29 @@ import { getUser } from "@/utils/getUser";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
+const BOOK_CATEGORIES = [
+  "Fiction",
+  "Non-Fiction",
+  "Horror",
+  "Fantasy",
+  "Comedy",
+  "Jokes",
+  "Funny",
+  "Children",
+  "Romance",
+  "Mystery",
+  "Thriller",
+  "Science Fiction",
+  "Biography",
+  "History",
+  "Self-Help",
+  "Poetry",
+  "Drama",
+  "Adventure",
+  "Crime",
+  "Dystopian",
+];
+
 export default async function EditBookPage({ params }) {
   const user = await getUser();
   const { id } = await params;
@@ -43,7 +66,7 @@ export default async function EditBookPage({ params }) {
 
   async function handleUpdateBook(formData) {
     "use server";
-    const { title, author, description, quote, released, img_url } =
+    const { title, author, description, quote, released, img_url, category } =
       Object.fromEntries(formData);
 
     // Validate - trim whitespace and check if empty
@@ -59,7 +82,7 @@ export default async function EditBookPage({ params }) {
     }
 
     await db.query(
-      `UPDATE books SET title = $1, author = $2, description = $3, quote = $4, released = $5, img_url = $6 WHERE id = $7`,
+      `UPDATE books SET title = $1, author = $2, description = $3, quote = $4, released = $5, img_url = $6, category = $7 WHERE id = $8`,
       [
         trimmedTitle,
         trimmedAuthor,
@@ -67,6 +90,7 @@ export default async function EditBookPage({ params }) {
         quote?.trim() || null,
         released || null,
         img_url?.trim() || null,
+        category || null,
         id,
       ],
     );
@@ -115,6 +139,30 @@ export default async function EditBookPage({ params }) {
                 required
                 className="w-full border border-white/20 bg-white/5 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
               />
+            </div>
+
+            <div>
+              <label className="block text-white text-sm font-medium mb-2">
+                Category
+              </label>
+              <select
+                name="category"
+                defaultValue={book.category || ""}
+                className="w-full border border-white/20 bg-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
+              >
+                <option value="" className="text-gray-400 bg-slate-800">
+                  Select a category
+                </option>
+                {BOOK_CATEGORIES.map((cat) => (
+                  <option
+                    key={cat}
+                    value={cat}
+                    className="text-white bg-slate-800"
+                  >
+                    {cat}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>
