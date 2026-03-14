@@ -3,6 +3,7 @@
 import { SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Logo from "./Logo";
 
 export default function Header({ hideBooks = false }) {
   const { isSignedIn } = useUser();
@@ -17,14 +18,8 @@ export default function Header({ hideBooks = false }) {
   return (
     <header className="flex justify-between items-center px-8 py-8 bg-gradient-to-r from-indigo-900 via-purple-800 to-indigo-900 shadow-lg">
       {/* Logo / Brand - Left side */}
-      <Link
-        href="/"
-        className="flex flex-col text-2xl font-bold text-white hover:text-pink-300 transition-colors"
-      >
-        <span>📚 BookVerse</span>
-        <span className="text-xs font-normal text-purple-300">
-          Your Gateway to the Book Universe
-        </span>
+      <Link href="/" className="flex items-center">
+        <Logo size="md" />
       </Link>
 
       {/* Right side - Navigation + Auth */}
