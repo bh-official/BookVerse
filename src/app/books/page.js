@@ -3,6 +3,8 @@ import { getUser } from "@/utils/getUser";
 import Link from "next/link";
 import { BOOK_CATEGORIES } from "@/utils/categories";
 
+export const dynamic = "force-dynamic";
+
 export default async function BooksPage({ searchParams }) {
   const user = await getUser();
   const params = await searchParams;

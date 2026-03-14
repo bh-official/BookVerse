@@ -2,6 +2,8 @@ import { db } from "@/utils/db";
 import Link from "next/link";
 import { BOOK_CATEGORIES, getCategoryEmoji } from "@/utils/categories";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Categories - BookVerse",
   description: "Browse books by category on BookVerse",

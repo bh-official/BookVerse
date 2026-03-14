@@ -4,6 +4,8 @@ import Link from "next/link";
 import LikeButton from "@/components/LikeButton";
 import { getAvatarColor } from "@/utils/categories";
 
+export const dynamic = "force-dynamic";
+
 export default async function PostsPage() {
   const user = await getUser();
   const currentUserId = user ? user[0].id : null;
