@@ -11,6 +11,7 @@ CREATE TABLE books (
     quote VARCHAR(255),
     released DATE,
     img_url TEXT,
+    category VARCHAR(100),
     FOREIGN KEY (user_id) REFERENCES user_account(id)
 );
 

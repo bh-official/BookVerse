@@ -42,6 +42,12 @@ export default function Header({ hideBooks = false }) {
                 Posts
               </Link>
             )}
+            <Link
+              href="/categories"
+              className="text-white hover:text-pink-300 transition-colors font-semibold"
+            >
+              Categories
+            </Link>
             <SignInButton mode="modal">
               <button className="text-white hover:text-pink-300 transition-colors font-semibold">
                 Sign In
@@ -66,6 +72,12 @@ export default function Header({ hideBooks = false }) {
                 Posts
               </Link>
             )}
+            <Link
+              href="/categories"
+              className="text-white hover:text-pink-300 transition-colors font-semibold"
+            >
+              Categories
+            </Link>
             <Link
               href="/users/you"
               className="text-white hover:text-pink-300 transition-colors font-semibold"
