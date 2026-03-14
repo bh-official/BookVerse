@@ -14,7 +14,7 @@ export default function Header({ hideBooks = false }) {
   const isPostsPage = pathname === "/posts" || pathname.startsWith("/posts/");
   const shouldHideBooks = hideBooks || isBooksPage || pathname === "/";
   const shouldHidePosts = isPostsPage || pathname === "/";
-  const shouldHideCategories = pathname === "/";
+  const shouldHideCategories = pathname === "/" || pathname === "/categories";
   const shouldHideMyProfile = pathname === "/users/you";
 
   return (
