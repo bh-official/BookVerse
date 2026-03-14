@@ -52,6 +52,16 @@ CREATE TABLE postss (
     FOREIGN KEY (user_id) REFERENCES user_account(id)
 );
 
+CREATE TABLE followers (
+    id SERIAL PRIMARY KEY,
+    follower_id INT NOT NULL,
+    following_id INT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (follower_id) REFERENCES user_account(id),
+    FOREIGN KEY (following_id) REFERENCES user_account(id),
+    UNIQUE(follower_id, following_id)
+);
+
 -- ============================================
 -- SEED DATA
 -- ============================================

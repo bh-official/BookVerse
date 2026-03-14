@@ -49,6 +49,21 @@ export default async function UserPage() {
     )
   ).rows;
 
+  // Get follower and following counts
+  const followerCount = (
+    await db.query(
+      `SELECT COUNT(*) as count FROM followers WHERE following_id = $1`,
+      [user[0].id],
+    )
+  ).rows[0].count;
+
+  const followingCount = (
+    await db.query(
+      `SELECT COUNT(*) as count FROM followers WHERE follower_id = $1`,
+      [user[0].id],
+    )
+  ).rows[0].count;
+
   async function handleUpdateProfile(formData) {
     "use server";
     const { username, bio } = Object.fromEntries(formData);
@@ -104,6 +119,22 @@ export default async function UserPage() {
                 </form>
               </div>
             </details>
+          </div>
+
+          {/* Follower Stats */}
+          <div className="flex gap-6 mt-4">
+            <div className="text-center">
+              <span className="block text-white font-bold text-lg">
+                {followerCount}
+              </span>
+              <span className="text-gray-400 text-sm">Followers</span>
+            </div>
+            <div className="text-center">
+              <span className="block text-white font-bold text-lg">
+                {followingCount}
+              </span>
+              <span className="text-gray-400 text-sm">Following</span>
+            </div>
           </div>
         </div>
 
