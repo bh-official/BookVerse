@@ -442,6 +442,8 @@ npm start
 | 12  | Ensure user's biography cannot be left blank - prompt if missing                         | ✅ Completed |
 | 13  | Create and display error page if user visits non-existent profile                        | ✅ Completed |
 
+---
+
 ### Requirements Achieved
 
 ✅ User authentication with Clerk  
@@ -455,6 +457,8 @@ npm start
 ✅ Error handling pages  
 ✅ Responsive design  
 ✅ Dark theme UI
+
+---
 
 ### Challenges
 
@@ -548,6 +552,8 @@ npm start
 - Implemented proper 404 handling with user-friendly messages
 - Added validation to check if the user ID is valid before querying
 
+---
+
 ### What Went Well
 
 - Clean component architecture
@@ -555,6 +561,8 @@ npm start
 - Consistent dark theme
 - Smooth animations with Framer Motion
 - Good separation of concerns
+
+---
 
 ### What I Learned
 
@@ -565,6 +573,8 @@ npm start
 - Framer Motion animations
 - Tailwind CSS customization
 
+---
+
 ### Areas for Improvement
 
 - Add more test coverage
@@ -573,6 +583,8 @@ npm start
 - Improve mobile responsiveness
 - Add search functionality
 - Add notifications system
+
+---
 
 ### Future Enhancements
 
