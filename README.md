@@ -339,21 +339,7 @@ All protected endpoints require authentication via Clerk. Include the Clerk sess
 
 ### Response Format
 
-All endpoints return JSON responses:
-
-```json
-// Success
-{
-  "id": 1,
-  "title": "Book Title",
-  "...": "..."
-}
-
-// Error
-{
-  "error": "Error message"
-}
-```
+All endpoints return JSON responses
 
 ### Error Responses
 
