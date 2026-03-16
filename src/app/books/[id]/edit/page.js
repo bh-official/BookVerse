@@ -2,7 +2,9 @@ import { db } from "@/utils/db";
 import { getUser } from "@/utils/getUser";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { BOOK_CATEGORIES } from "@/utils/categories";
+import { getCategories } from "@/utils/categories";
+
+export const dynamic = "force-dynamic";
 
 export default async function EditBookPage({ params }) {
   const user = await getUser();
@@ -10,6 +12,9 @@ export default async function EditBookPage({ params }) {
 
   const book = (await db.query(`SELECT * FROM books WHERE id = $1`, [id]))
     .rows[0];
+
+  // Fetch dynamic categories from database
+  const categories = await getCategories();
 
   if (!book) {
     return (
@@ -44,8 +49,19 @@ export default async function EditBookPage({ params }) {
 
   async function handleUpdateBook(formData) {
     "use server";
-    const { title, author, description, quote, released, img_url, category } =
-      Object.fromEntries(formData);
+    const {
+      title,
+      author,
+      description,
+      quote,
+      released,
+      img_url,
+      category,
+      newCategory,
+    } = Object.fromEntries(formData);
+
+    // Use newCategory if provided, otherwise use selected category
+    const finalCategory = newCategory?.trim() || category || null;
 
     // Validate - trim whitespace and check if empty
     const trimmedTitle = title?.trim();
@@ -68,7 +84,7 @@ export default async function EditBookPage({ params }) {
         quote?.trim() || null,
         released || null,
         img_url?.trim() || null,
-        category || null,
+        finalCategory,
         id,
       ],
     );
@@ -123,24 +139,34 @@ export default async function EditBookPage({ params }) {
               <label className="block text-white text-sm font-medium mb-2">
                 Category
               </label>
-              <select
-                name="category"
-                defaultValue={book.category || ""}
-                className="w-full border border-white/20 bg-white/5 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
-              >
-                <option value="" className="bg-slate-800 text-gray-400">
-                  Select a category
-                </option>
-                {BOOK_CATEGORIES.map((cat) => (
-                  <option
-                    key={cat}
-                    value={cat}
-                    className="bg-slate-800 text-white"
-                  >
-                    {cat}
+              <div className="space-y-2">
+                <select
+                  name="category"
+                  defaultValue={book.category || ""}
+                  className="w-full border border-white/20 bg-white/5 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500"
+                >
+                  <option value="" className="bg-slate-800 text-gray-400">
+                    Select a category
                   </option>
-                ))}
-              </select>
+                  {categories.map((cat) => (
+                    <option
+                      key={cat}
+                      value={cat}
+                      className="bg-slate-800 text-white"
+                    >
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-gray-500 text-sm text-center">
+                  — or type a new category below —
+                </p>
+                <input
+                  name="newCategory"
+                  placeholder="Enter new category name"
+                  className="w-full border border-white/20 bg-white/5 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
+                />
+              </div>
             </div>
 
             <div>

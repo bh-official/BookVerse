@@ -63,7 +63,7 @@
 - **Browse Books**: View all books in the library with cover images
 - **Add Books**: Create new book entries with title, author, description, quotes, release date, and category
 - **Edit Books**: Modify book information
-- **Categories**: Browse books by genre/category (Fiction, Non-Fiction, Horror, Fantasy, Comedy, etc.)
+- **Categories**: Browse books by dynamically fetched categories. Add custom categories when creating books - no manual configuration needed!
 
 ### ✍️ Reviews & Posts
 
@@ -323,6 +323,8 @@ BookVerse provides a comprehensive RESTful API for all resources. The API suppor
 | GET    | `/api/categories`            | Get all categories with book counts |
 | GET    | `/api/categories/[category]` | Get books by category               |
 
+> **Note:** Categories are dynamically fetched from the database. When you add a book with a new category, it automatically appears in the system. The predefined fallback categories include: Fiction, Non-Fiction, Horror, Fantasy, Comedy, Jokes, Funny, Children, Romance, Mystery, Thriller, Science Fiction, Biography, History, Self-Help, Poetry, Drama, Adventure, Crime, Dystopian, and Coding. Unknown categories automatically get a generated emoji based on their name.
+
 #### Genres API (`/api/genres`)
 
 | Method | Endpoint           | Description                   |
@@ -382,7 +384,9 @@ All endpoints return JSON responses
 
 - Browse by category
 - Book count per category
-- Category emojis
+- Category emojis (auto-generated for custom categories)
+- Add new books with custom categories - no manual setup required
+- Categories are dynamically fetched from the database
 
 ### Posts (`/posts`)
 

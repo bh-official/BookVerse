@@ -1,6 +1,5 @@
 import { db } from "@/utils/db";
 import { NextResponse } from "next/server";
-import { isValidCategory } from "@/utils/categories";
 
 // GET /api/categories/[category] - Get books by category
 export async function GET(request, { params }) {
@@ -8,8 +7,14 @@ export async function GET(request, { params }) {
     const { category } = await params;
     const decodedCategory = decodeURIComponent(category);
 
-    // Validate category
-    if (!isValidCategory(decodedCategory)) {
+    // Get all unique categories from database
+    const categoriesResult = await db.query(
+      `SELECT DISTINCT category FROM books WHERE category IS NOT NULL AND category != ''`,
+    );
+    const validCategories = categoriesResult.rows.map((row) => row.category);
+
+    // Validate category (case-sensitive match)
+    if (!validCategories.includes(decodedCategory)) {
       return NextResponse.json({ error: "Invalid category" }, { status: 400 });
     }
 

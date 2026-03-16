@@ -2,15 +2,30 @@ import { db } from "@/utils/db";
 import { getUser } from "@/utils/getUser";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { BOOK_CATEGORIES } from "@/utils/categories";
+import { getCategories } from "@/utils/categories";
+
+export const dynamic = "force-dynamic";
 
 export default async function NewBookPage() {
   const user = await getUser();
+  // Dynamically fetch categories from database
+  const categories = await getCategories();
 
   async function handleAddBook(formData) {
     "use server";
-    const { title, author, description, quote, released, img_url, category } =
-      Object.fromEntries(formData);
+    const {
+      title,
+      author,
+      description,
+      quote,
+      released,
+      img_url,
+      category,
+      newCategory,
+    } = Object.fromEntries(formData);
+
+    // Use newCategory if provided, otherwise use selected category
+    const finalCategory = newCategory?.trim() || category || null;
 
     // Validate - trim whitespace and check if empty
     const trimmedTitle = title?.trim();
@@ -35,7 +50,7 @@ export default async function NewBookPage() {
         quote?.trim() || null,
         released || null,
         img_url?.trim() || null,
-        category || null,
+        finalCategory,
       ],
     );
     redirect(`/books/${result.rows[0].id}`);
@@ -75,23 +90,33 @@ export default async function NewBookPage() {
             </div>
             <div>
               <label className="block text-white mb-2">Category</label>
-              <select
-                name="category"
-                className="w-full border border-white/20 bg-white/5 rounded-lg p-3 text-white focus:outline-none focus:border-purple-500"
-              >
-                <option value="" className="bg-slate-800 text-gray-400">
-                  Select a category
-                </option>
-                {BOOK_CATEGORIES.map((cat) => (
-                  <option
-                    key={cat}
-                    value={cat}
-                    className="bg-slate-800 text-white"
-                  >
-                    {cat}
+              <div className="space-y-2">
+                <select
+                  name="category"
+                  className="w-full border border-white/20 bg-white/5 rounded-lg p-3 text-white focus:outline-none focus:border-purple-500"
+                >
+                  <option value="" className="bg-slate-800 text-gray-400">
+                    Select a category
                   </option>
-                ))}
-              </select>
+                  {categories.map((cat) => (
+                    <option
+                      key={cat}
+                      value={cat}
+                      className="bg-slate-800 text-white"
+                    >
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-gray-500 text-sm text-center">
+                  — or type a new category below —
+                </p>
+                <input
+                  name="newCategory"
+                  placeholder="Enter new category name"
+                  className="w-full border border-white/20 bg-white/5 rounded-lg p-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
+                />
+              </div>
             </div>
             <div>
               <label className="block text-white mb-2">Description</label>

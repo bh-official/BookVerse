@@ -1,6 +1,6 @@
 import { db } from "@/utils/db";
 import Link from "next/link";
-import { BOOK_CATEGORIES, getCategoryEmoji } from "@/utils/categories";
+import { getCategoryEmoji } from "@/utils/categories";
 
 export const dynamic = "force-dynamic";
 
@@ -10,19 +10,18 @@ export const metadata = {
 };
 
 export default async function CategoriesPage() {
-  // Get book count for each category
-  const categoryCounts = await Promise.all(
-    BOOK_CATEGORIES.map(async (category) => {
-      const result = await db.query(
-        `SELECT COUNT(*) as count FROM books WHERE category = $1`,
-        [category],
-      );
-      return {
-        name: category,
-        count: parseInt(result.rows[0]?.count || 0),
-      };
-    }),
+  // Dynamically fetch categories with book counts from database
+  const result = await db.query(
+    `SELECT category, COUNT(*) as count FROM books 
+     WHERE category IS NOT NULL AND category != '' 
+     GROUP BY category 
+     ORDER BY category`,
   );
+
+  const categoryCounts = result.rows.map((row) => ({
+    name: row.category,
+    count: parseInt(row.count),
+  }));
 
   // Get total book count
   const totalResult = await db.query(`SELECT COUNT(*) as count FROM books`);
@@ -100,27 +99,6 @@ export default async function CategoriesPage() {
                 </div>
               </Link>
             ))}
-          </div>
-        )}
-
-        {/* Inactive Categories Section */}
-        {categoryCounts.filter((c) => c.count === 0).length > 0 && (
-          <div className="mt-12">
-            <h2 className="text-xl font-semibold text-gray-400 mb-4">
-              Categories Without Books
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {categoryCounts
-                .filter((cat) => cat.count === 0)
-                .map((category) => (
-                  <span
-                    key={category.name}
-                    className="px-3 py-1 bg-white/5 text-gray-500 rounded-full text-sm"
-                  >
-                    {category.name}
-                  </span>
-                ))}
-            </div>
           </div>
         )}
       </div>

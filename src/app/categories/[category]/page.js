@@ -1,23 +1,33 @@
 import { db } from "@/utils/db";
 import Link from "next/link";
-import {
-  BOOK_CATEGORIES,
-  getCategoryEmoji,
-  isValidCategory,
-} from "@/utils/categories";
+import { getCategoryEmoji, getCategories } from "@/utils/categories";
+import { BOOK_CATEGORIES } from "@/utils/categories";
 import InvalidLink from "@/components/InvalidLink";
-import NotFound from "@/components/NotFound";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }) {
   const { category } = await params;
   const decodedCategory = decodeURIComponent(category);
 
-  if (!isValidCategory(decodedCategory)) {
+  // Get all unique categories from database
+  const categoriesResult = await db.query(
+    `SELECT DISTINCT LOWER(category) as category FROM books WHERE category IS NOT NULL AND category != ''`,
+  );
+  const dbCategories = categoriesResult.rows.map((row) => row.category);
+
+  // Combine predefined categories with database categories for validation
+  const predefinedLower = BOOK_CATEGORIES.map((c) => c.toLowerCase());
+  const validCategoriesSet = new Set([...predefinedLower, ...dbCategories]);
+
+  const categoryLower = decodedCategory.toLowerCase();
+
+  if (!validCategoriesSet.has(categoryLower)) {
     return { title: "Invalid Category - BookVerse" };
   }
 
   const result = await db.query(
-    `SELECT COUNT(*) as count FROM books WHERE category = $1`,
+    `SELECT COUNT(*) as count FROM books WHERE LOWER(category) = LOWER($1)`,
     [decodedCategory],
   );
   const bookCount = parseInt(result.rows[0]?.count || 0);
@@ -32,7 +42,19 @@ export default async function CategoryPage({ params }) {
   const { category } = await params;
   const decodedCategory = decodeURIComponent(category);
 
-  if (!isValidCategory(decodedCategory)) {
+  // Get all unique categories from database
+  const categoriesResult = await db.query(
+    `SELECT DISTINCT LOWER(category) as category FROM books WHERE category IS NOT NULL AND category != ''`,
+  );
+  const dbCategories = categoriesResult.rows.map((row) => row.category);
+
+  // Combine predefined categories with database categories for validation
+  const predefinedLower = BOOK_CATEGORIES.map((c) => c.toLowerCase());
+  const validCategoriesSet = new Set([...predefinedLower, ...dbCategories]);
+
+  const categoryLower = decodedCategory.toLowerCase();
+
+  if (!validCategoriesSet.has(categoryLower)) {
     return (
       <InvalidLink
         title="Invalid Category Link"
@@ -43,7 +65,7 @@ export default async function CategoryPage({ params }) {
   }
 
   const booksResult = await db.query(
-    `SELECT * FROM books WHERE category = $1 ORDER BY id DESC`,
+    `SELECT * FROM books WHERE LOWER(category) = LOWER($1) ORDER BY id DESC`,
     [decodedCategory],
   );
   const books = booksResult.rows;

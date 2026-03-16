@@ -1,23 +1,21 @@
 import { db } from "@/utils/db";
 import { NextResponse } from "next/server";
-import { BOOK_CATEGORIES } from "@/utils/categories";
 
 // GET /api/categories - Get all categories with book counts
 export async function GET(request) {
   try {
-    // Get book count for each category
-    const categoryCounts = await Promise.all(
-      BOOK_CATEGORIES.map(async (category) => {
-        const result = await db.query(
-          `SELECT COUNT(*) as count FROM books WHERE category = $1`,
-          [category],
-        );
-        return {
-          name: category,
-          count: parseInt(result.rows[0]?.count || 0),
-        };
-      }),
+    // Fetch all unique categories with their counts from books table
+    const result = await db.query(
+      `SELECT category, COUNT(*) as count FROM books 
+       WHERE category IS NOT NULL AND category != '' 
+       GROUP BY category 
+       ORDER BY category`,
     );
+
+    const categoryCounts = result.rows.map((row) => ({
+      name: row.category,
+      count: parseInt(row.count),
+    }));
 
     // Get total book count
     const totalResult = await db.query(`SELECT COUNT(*) as count FROM books`);

@@ -1,7 +1,6 @@
 import { db } from "@/utils/db";
 import { getUser } from "@/utils/getUser";
 import Link from "next/link";
-import { BOOK_CATEGORIES } from "@/utils/categories";
 
 export const dynamic = "force-dynamic";
 
@@ -9,6 +8,12 @@ export default async function BooksPage({ searchParams }) {
   const user = await getUser();
   const params = await searchParams;
   const category = params?.category;
+
+  // Dynamically fetch categories from database
+  const categoriesResult = await db.query(
+    `SELECT DISTINCT category FROM books WHERE category IS NOT NULL AND category != '' ORDER BY category`,
+  );
+  const categories = categoriesResult.rows.map((row) => row.category);
 
   const books = category
     ? (await db.query(`SELECT * FROM books WHERE category = $1`, [category]))
@@ -43,7 +48,7 @@ export default async function BooksPage({ searchParams }) {
             >
               All
             </Link>
-            {BOOK_CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <Link
                 key={cat}
                 href={`/books?category=${encodeURIComponent(cat)}`}

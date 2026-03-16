@@ -12,7 +12,10 @@ export async function GET(request) {
     let books;
     if (category) {
       books = (
-        await db.query(`SELECT * FROM books WHERE category = $1`, [category])
+        await db.query(
+          `SELECT * FROM books WHERE LOWER(category) = LOWER($1)`,
+          [category],
+        )
       ).rows;
     } else {
       books = (await db.query(`SELECT * FROM books`)).rows;
