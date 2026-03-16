@@ -91,10 +91,35 @@ bookverse/
 ├── src/
 │   ├── app/                            # Next.js App Router
 │   │   ├── api/                        # API routes
-│   │   │   └── posts/
+│   │   │   ├── posts/
+│   │   │   │   ├── route.js            # Posts CRUD
+│   │   │   │   └── [id]/
+│   │   │   │       ├── route.js        # Single post CRUD
+│   │   │   │       └── like/
+│   │   │   │           └── route.js    # Like toggle
+│   │   │   ├── books/
+│   │   │   │   ├── route.js            # Books CRUD
+│   │   │   │   ├── [id]/
+│   │   │   │   │   ├── route.js        # Single book CRUD
+│   │   │   │   │   └── reviews/
+│   │   │   │   │       └── route.js    # Reviews for book
+│   │   │   ├── reviews/
+│   │   │   │   └── [id]/
+│   │   │   │       └── route.js        # Single review CRUD
+│   │   │   ├── users/
+│   │   │   │   ├── route.js            # Users list
+│   │   │   │   └── [id]/
+│   │   │   │       ├── route.js        # Single user CRUD
+│   │   │   │       └── follow/
+│   │   │   │           └── route.js    # Follow/unfollow
+│   │   │   ├── categories/
+│   │   │   │   ├── route.js            # Categories list
+│   │   │   │   └── [category]/
+│   │   │   │       └── route.js        # Books by category
+│   │   │   └── genres/
+│   │   │       ├── route.js            # Genres CRUD
 │   │   │       └── [id]/
-│   │   │           └── like/
-│   │   │               └── route.js
+│   │   │           └── route.js        # Single genre CRUD
 │   │   ├── books/
 │   │   │   ├── page.js                 # Books listing
 │   │   │   ├── new/
@@ -245,52 +270,100 @@ bookverse/
 
 ## API Endpoints
 
-BookVerse uses Next.js App Router with Server Actions and form submissions. Here's a comprehensive list of all data operations:
+BookVerse provides a comprehensive RESTful API for all resources. The API supports full CRUD operations with proper authentication and authorization.
 
-### Server Actions & Form Functions
+### REST API Endpoints
 
-| Action           | File                                                | Function               |
-| ---------------- | --------------------------------------------------- | ---------------------- |
-| Like/Unlike Post | `src/app/api/posts/[id]/like/route.js`              | `POST` handler         |
-| Create Book      | `src/app/books/new/page.js`                         | Form action            |
-| Update Book      | `src/app/books/[id]/edit/page.js`                   | Form action            |
-| Delete Book      | `src/app/books/[id]/page.js`                        | DeleteButton component |
-| Create Review    | `src/app/books/[id]/page.js`                        | Form action            |
-| Update Review    | `src/app/books/[id]/review/[reviewId]/edit/page.js` | Form action            |
-| Create Post      | `src/app/users/you/page.js`                         | Form action            |
-| Update Post      | `src/app/users/you/post/[postId]/edit/page.js`      | Form action            |
-| Delete Post      | `src/app/users/you/page.js`                         | DeleteButton component |
-| Update Profile   | `src/app/users/onboarding/page.js`                  | Form action            |
-| Follow User      | `src/app/users/[id]/page.js`                        | Server action          |
-| Unfollow User    | `src/app/users/[id]/page.js`                        | Server action          |
+#### Posts API (`/api/posts`)
 
----
+| Method | Endpoint               | Description                                  |
+| ------ | ---------------------- | -------------------------------------------- |
+| GET    | `/api/posts`           | Get all posts with user info and like counts |
+| POST   | `/api/posts`           | Create a new post                            |
+| GET    | `/api/posts/[id]`      | Get a single post                            |
+| PUT    | `/api/posts/[id]`      | Update a post                                |
+| DELETE | `/api/posts/[id]`      | Delete a post                                |
+| POST   | `/api/posts/[id]/like` | Toggle like on a post                        |
 
-### Data Access Patterns
+#### Books API (`/api/books`)
 
-Since BookVerse uses Next.js App Router, most data operations are performed directly in Server Components:
+| Method | Endpoint          | Description                                  |
+| ------ | ----------------- | -------------------------------------------- |
+| GET    | `/api/books`      | Get all books (supports `?category=` filter) |
+| POST   | `/api/books`      | Create a new book                            |
+| GET    | `/api/books/[id]` | Get a single book with reviews               |
+| PUT    | `/api/books/[id]` | Update a book                                |
+| DELETE | `/api/books/[id]` | Delete a book                                |
 
-#### Server Actions (Form Submissions)
+#### Reviews API
 
-The application uses form actions for:
+| Method | Endpoint                  | Description            |
+| ------ | ------------------------- | ---------------------- |
+| GET    | `/api/books/[id]/reviews` | Get reviews for a book |
+| POST   | `/api/books/[id]/reviews` | Create a review        |
+| PUT    | `/api/reviews/[id]`       | Update a review        |
+| DELETE | `/api/reviews/[id]`       | Delete a review        |
 
-- Creating new books (`/books/new/page.js`)
-- Adding reviews (`/books/[id]/page.js`)
-- Creating posts (`/users/you/page.js`)
-- Updating profiles (`/users/onboarding/page.js`)
-- Editing reviews (`/books/[id]/review/[reviewId]/edit/page.js`)
+#### Users API (`/api/users`)
 
----
+| Method | Endpoint                 | Description                              |
+| ------ | ------------------------ | ---------------------------------------- |
+| GET    | `/api/users`             | Get all users                            |
+| POST   | `/api/users`             | Create a new user (onboarding)           |
+| GET    | `/api/users/[id]`        | Get a single user with posts and reviews |
+| PUT    | `/api/users/[id]`        | Update a user                            |
+| DELETE | `/api/users/[id]`        | Delete a user                            |
+| POST   | `/api/users/[id]/follow` | Follow a user                            |
+| DELETE | `/api/users/[id]/follow` | Unfollow a user                          |
+
+#### Categories API (`/api/categories`)
+
+| Method | Endpoint                     | Description                         |
+| ------ | ---------------------------- | ----------------------------------- |
+| GET    | `/api/categories`            | Get all categories with book counts |
+| GET    | `/api/categories/[category]` | Get books by category               |
+
+#### Genres API (`/api/genres`)
+
+| Method | Endpoint           | Description                   |
+| ------ | ------------------ | ----------------------------- |
+| GET    | `/api/genres`      | Get all genres                |
+| POST   | `/api/genres`      | Create a new genre            |
+| GET    | `/api/genres/[id]` | Get a single genre with books |
+| PUT    | `/api/genres/[id]` | Update a genre                |
+| DELETE | `/api/genres/[id]` | Delete a genre                |
+
+### Authentication
+
+All protected endpoints require authentication via Clerk. Include the Clerk session token in the request headers.
+
+### Response Format
+
+All endpoints return JSON responses:
+
+```json
+// Success
+{
+  "id": 1,
+  "title": "Book Title",
+  "...": "..."
+}
+
+// Error
+{
+  "error": "Error message"
+}
+```
 
 ### Error Responses
-
-All API routes return consistent error responses:
 
 | Status Code | Description                            |
 | ----------- | -------------------------------------- |
 | 400         | Bad Request - Invalid parameters       |
 | 401         | Unauthorized - Not logged in           |
+| 403         | Forbidden - Not authorized             |
 | 404         | Not Found - Resource doesn't exist     |
+| 409         | Conflict - Resource already exists     |
 | 500         | Internal Server Error - Server failure |
 
 ---

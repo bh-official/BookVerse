@@ -167,3 +167,44 @@ INSERT INTO review (user_id, book_id, content) VALUES
 -- Insert book_genres associations
 INSERT INTO book_genres (book_id, genre_id) VALUES 
 (1, 1), (2, 3), (3, 4), (4, 4), (5, 3), (6, 5), (7, 2), (8, 3), (9, 1), (10, 5), (11, 3), (12, 1);
+
+-- ============================================
+-- UPDATE CATEGORIES FOR BOOKS
+-- ============================================
+-- Update books without categories based on their genre associations
+
+-- Book 1: The Hobbit - Fantasy
+UPDATE books SET category = 'Fantasy' WHERE title = 'The Hobbit';
+
+-- Book 2: 1984 - Science Fiction (Dystopian)
+UPDATE books SET category = 'Science Fiction' WHERE title = '1984';
+
+-- Book 3: Pride and Prejudice - Romance
+UPDATE books SET category = 'Romance' WHERE title = 'Pride and Prejudice';
+
+-- Book 4: The Great Gatsby - Romance
+UPDATE books SET category = 'Romance' WHERE title = 'The Great Gatsby';
+
+-- Book 5: Dune - Science Fiction
+UPDATE books SET category = 'Science Fiction' WHERE title = 'Dune';
+
+-- Book 6: The Catcher in the Rye - Classic
+UPDATE books SET category = 'Classic' WHERE title = 'The Catcher in the Rye';
+
+-- Book 7: Murder on the Orient Express - Mystery
+UPDATE books SET category = 'Mystery' WHERE title = 'Murder on the Orient Express';
+
+-- Book 8: Foundation - Science Fiction
+UPDATE books SET category = 'Science Fiction' WHERE title = 'Foundation';
+
+-- Book 9: The Fellowship of the Ring - Fantasy
+UPDATE books SET category = 'Fantasy' WHERE title = 'The Fellowship of the Ring';
+
+-- Book 10: To Kill a Mockingbird - Classic
+UPDATE books SET category = 'Classic' WHERE title = 'To Kill a Mockingbird';
+
+-- Book 11: Brave New World - Science Fiction
+UPDATE books SET category = 'Science Fiction' WHERE title = 'Brave New World';
+
+-- Book 12: The Lord of the Rings - Fantasy
+UPDATE books SET category = 'Fantasy' WHERE title = 'The Lord of the Rings';
